@@ -3,6 +3,7 @@ import 'package:travel_app/databaseservices.dart';
 import 'package:travel_app/filtration/selecthowmanydays.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/menus/placesScreen.dart';
+import 'package:travel_app/placeDetails.dart';
 import 'package:travel_app/signin_service/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -256,6 +257,27 @@ class _HomePageState extends State<HomePage> {
                                                   as dynamic)['image'],
                                               cityname:
                                                   (e.data() as dynamic)['name'],
+                                              callback: (context) {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: ((context) => PlaceDetails(
+                                                            image: (e.data()
+                                                                    as dynamic)[
+                                                                'image'],
+                                                            name: (e.data() as dynamic)[
+                                                                'name'],
+                                                            numTel: (e.data()
+                                                                    as dynamic)[
+                                                                'numTel'],
+                                                            address: (e.data()
+                                                                    as dynamic)[
+                                                                'address'],
+                                                            timeOpenClose:
+                                                                (e.data() as dynamic)['timeOpenClose'],
+                                                            website: (e.data() as dynamic)['website'],
+                                                            price: (e.data() as dynamic)['price']))));
+                                              },
                                             ))
                                         .toList());
                               } else {

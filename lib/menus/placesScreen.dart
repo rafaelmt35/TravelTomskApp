@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/databaseservices.dart';
+import 'package:travel_app/placeDetails.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 
 class TypePlaceScreen extends StatefulWidget {
@@ -110,6 +111,25 @@ class _TypePlaceScreenState extends State<TypePlaceScreen> {
                         .map((e) => Citycardmenu(
                               imagename: (e.data() as dynamic)['image'],
                               cityname: (e.data() as dynamic)['name'],
+                              callback: (context) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => PlaceDetails(
+                                            image:
+                                                (e.data() as dynamic)['image'],
+                                            name: (e.data() as dynamic)['name'],
+                                            numTel:
+                                                (e.data() as dynamic)['numTel'],
+                                            address: (e.data()
+                                                as dynamic)['address'],
+                                            timeOpenClose: (e.data()
+                                                as dynamic)['timeOpenClose'],
+                                            website: (e.data()
+                                                as dynamic)['website'],
+                                            price: (e.data()
+                                                as dynamic)['price']))));
+                              },
                             ))
                         .toList(),
                   );

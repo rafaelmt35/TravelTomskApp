@@ -105,9 +105,12 @@ class Nexttripmenu extends StatelessWidget {
 class Citycardmenu extends StatelessWidget {
   final String imagename;
   final String cityname;
-
+  final void Function(BuildContext) callback;
   const Citycardmenu(
-      {Key? key, required this.imagename, required this.cityname})
+      {Key? key,
+      required this.imagename,
+      required this.cityname,
+      required this.callback})
       : super(key: key);
 
   @override
@@ -115,9 +118,7 @@ class Citycardmenu extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
-          print('test');
-        },
+        onTap: () => callback.call(context),
         child: Container(
             width: 172,
             decoration: BoxDecoration(
