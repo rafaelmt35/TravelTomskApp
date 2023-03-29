@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../const.dart';
+import '../placeDetails.dart';
 
 class Nexttripmenu extends StatelessWidget {
   final String imagename;
@@ -447,3 +449,5 @@ class ClickackbleText extends StatelessWidget {
     );
   }
 }
+
+

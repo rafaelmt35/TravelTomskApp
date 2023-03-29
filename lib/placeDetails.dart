@@ -18,7 +18,7 @@ class PlaceDetails extends StatefulWidget {
   final String address;
   final String timeOpenClose;
   final String website;
-  final String price;
+  final int price;
 
   @override
   State<PlaceDetails> createState() => _PlaceDetailsState();
@@ -111,7 +111,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                 height: 15.0,
               ),
               Visibility(
-                visible: widget.price == '' ? false : true,
+                visible: widget.price == 0 ? false : true,
                 child: Text(
                   'Цена: ${widget.price} ₽',
                   textAlign: TextAlign.center,

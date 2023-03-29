@@ -11,7 +11,7 @@ class CountDays extends StatefulWidget {
 }
 
 class _CountDaysState extends State<CountDays> {
-  TextEditingController controllersearch = TextEditingController();
+  TextEditingController controllerInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,8 @@ class _CountDaysState extends State<CountDays> {
                     color: Colors.white,
                   ),
                   child: TextField(
-                    controller: controllersearch,
+                    controller: controllerInput,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -74,7 +75,11 @@ class _CountDaysState extends State<CountDays> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: ((context) => PreferencePlace())));
+                                builder: ((context) => PreferencePlace(
+                                      days: controllerInput.text == ''
+                                          ? 0
+                                          : int.parse(controllerInput.text),
+                                    ))));
                       },
                       command: 'NEXT PAGE'))
             ],

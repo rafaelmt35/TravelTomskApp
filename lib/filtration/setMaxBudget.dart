@@ -5,14 +5,23 @@ import '../const.dart';
 import '../widgets/custom_widgets.dart';
 
 class SetMaxBudget extends StatefulWidget {
-  const SetMaxBudget({super.key});
-
+  const SetMaxBudget({super.key, required this.days, required this.choices});
+  final int days;
+  final String choices;
   @override
   State<SetMaxBudget> createState() => _SetMaxBudgetState();
 }
 
 class _SetMaxBudgetState extends State<SetMaxBudget> {
-  TextEditingController controllersearch = TextEditingController();
+  TextEditingController controllerBudget = TextEditingController();
+
+  @override
+  void initState() {
+    print(widget.choices);
+    print(widget.days);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,7 +61,8 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                         color: Colors.white,
                       ),
                       child: TextField(
-                        controller: controllersearch,
+                        keyboardType: TextInputType.number,
+                        controller: controllerBudget,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -84,7 +94,12 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: ((context) => ResultFiltration())));
+                                builder: ((context) => ResultFiltration(
+                                      choices: widget.choices,
+                                      days: widget.days,
+                                      maxBudget:
+                                          int.parse(controllerBudget.text),
+                                    ))));
                       },
                       command: 'FINISH!'))
             ],

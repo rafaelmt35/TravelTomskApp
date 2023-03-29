@@ -29,8 +29,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference placeCollectionReference =
-        firestore.collection('Place');
+    Query<Map<String, dynamic>> placeCollectionReference =
+        firestore.collection('Place').limit(8);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CountDays()));
+                                  builder: (context) => const CountDays()));
                         },
                         command: 'BUDGET',
                         iconname: Icons.monetization_on,
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                           menuname: 'Hotels',
                           callback: (context) {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => TypePlaceScreen(
+                                builder: (_) => const TypePlaceScreen(
                                       typePlace: 'Hotel',
                                     )));
                           },
@@ -170,8 +170,8 @@ class _HomePageState extends State<HomePage> {
                           menuname: 'Restaurant',
                           callback: (context) {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) =>
-                                    TypePlaceScreen(typePlace: 'Restaurant')));
+                                builder: (_) => const TypePlaceScreen(
+                                    typePlace: 'Restaurant')));
                           },
                         ),
                         Smallmenubox(
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                           callback: (context) {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (_) =>
-                                    TypePlaceScreen(typePlace: 'Park')));
+                                    const TypePlaceScreen(typePlace: 'Park')));
                           },
                         ),
                         Smallmenubox(
@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                           callback: (context) {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (_) =>
-                                    TypePlaceScreen(typePlace: 'Cafe')));
+                                    const TypePlaceScreen(typePlace: 'Cafe')));
                           },
                         ),
                       ],
@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) =>
-                                  TypePlaceScreen(typePlace: 'Apotek')));
+                                  const TypePlaceScreen(typePlace: 'Apotek')));
                         },
                       ),
                       Smallmenubox(
@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) =>
-                                  TypePlaceScreen(typePlace: 'Museum')));
+                                  const TypePlaceScreen(typePlace: 'Museum')));
                         },
                       ),
                       Smallmenubox(
@@ -222,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) =>
-                                  TypePlaceScreen(typePlace: 'Mall')));
+                                  const TypePlaceScreen(typePlace: 'Mall')));
                         },
                       ),
                       Smallmenubox(
@@ -230,8 +230,8 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'University',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) =>
-                                  TypePlaceScreen(typePlace: 'University')));
+                              builder: (_) => const TypePlaceScreen(
+                                  typePlace: 'University')));
                         },
                       ),
                     ],
@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                       child: ListView(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        physics: ClampingScrollPhysics(),
+                        physics: const ClampingScrollPhysics(),
                         children: [
                           StreamBuilder<QuerySnapshot>(
                             stream: placeCollectionReference.snapshots(),
@@ -259,29 +259,33 @@ class _HomePageState extends State<HomePage> {
                                                   (e.data() as dynamic)['name'],
                                               callback: (context) {
                                                 Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: ((context) => PlaceDetails(
-                                                            image: (e.data()
-                                                                    as dynamic)[
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: ((context) => PlaceDetails(
+                                                        image:
+                                                            (e.data() as dynamic)[
                                                                 'image'],
-                                                            name: (e.data() as dynamic)[
-                                                                'name'],
-                                                            numTel: (e.data()
-                                                                    as dynamic)[
+                                                        name: (e.data()
+                                                            as dynamic)['name'],
+                                                        numTel:
+                                                            (e.data() as dynamic)[
                                                                 'numTel'],
-                                                            address: (e.data()
-                                                                    as dynamic)[
+                                                        address:
+                                                            (e.data() as dynamic)[
                                                                 'address'],
-                                                            timeOpenClose:
-                                                                (e.data() as dynamic)['timeOpenClose'],
-                                                            website: (e.data() as dynamic)['website'],
-                                                            price: (e.data() as dynamic)['price']))));
+                                                        timeOpenClose: (e.data()
+                                                                as dynamic)[
+                                                            'timeOpenClose'],
+                                                        website: (e.data()
+                                                            as dynamic)['website'],
+                                                        price: (e.data() as dynamic)['price'])),
+                                                  ),
+                                                );
                                               },
                                             ))
                                         .toList());
                               } else {
-                                return Text('Loading');
+                                return const Text('Loading');
                               }
                             },
                           )

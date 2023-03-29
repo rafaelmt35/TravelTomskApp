@@ -5,8 +5,8 @@ import '../const.dart';
 import '../widgets/custom_widgets.dart';
 
 class PreferencePlace extends StatefulWidget {
-  const PreferencePlace({super.key});
-
+  const PreferencePlace({super.key, required this.days});
+  final int days;
   @override
   State<PreferencePlace> createState() => _PreferencePlaceState();
 }
@@ -84,7 +84,12 @@ class _PreferencePlaceState extends State<PreferencePlace> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: ((context) => SetMaxBudget())));
+                                builder: ((context) => SetMaxBudget(
+                                      choices: _choose == Choose.travelplaces
+                                          ? 'Travel Place '
+                                          : 'Accomodation',
+                                      days: widget.days,
+                                    ))));
                       },
                       command: 'NEXT PAGE'))
             ],
