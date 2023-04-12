@@ -25,7 +25,11 @@ class DatabaseServices {
               .limit(days)
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
               return GridView.count(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -57,8 +61,6 @@ class DatabaseServices {
                       },
                     );
                   }).toList());
-            } else {
-              return const Text('');
             }
           },
         )
@@ -67,11 +69,9 @@ class DatabaseServices {
   }
 
   getHotels(int maxBudget, String choice, int days) {
-    bool visible = false;
     if (choice == 'Travel Place') {
-      var newmaxBudget = (maxBudget - (maxBudget * 70 / 100)) / days;
+      var newmaxBudget = (maxBudget - (maxBudget * 70 / 100)) / (days - 1);
       print(newmaxBudget);
-
       return Column(
         children: [
           Container(
@@ -85,6 +85,7 @@ class DatabaseServices {
             stream: FirebaseFirestore.instance
                 .collection("Place")
                 .where('typePlace', isEqualTo: 'Hotel')
+                .where('price', isLessThanOrEqualTo: newmaxBudget)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -98,29 +99,24 @@ class DatabaseServices {
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
-
-                      return Visibility(
-                        visible:
-                            newmaxBudget <= data["price"] ? visible : !visible,
-                        child: Citycardmenu(
-                          imagename: data['image'],
-                          cityname: data['name'],
-                          callback: (context) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: ((context) => PlaceDetails(
-                                    image: data['image'],
-                                    name: data['name'],
-                                    numTel: data['numTel'],
-                                    address: data['address'],
-                                    timeOpenClose: data['timeOpenClose'],
-                                    website: data['website'],
-                                    price: data['price'])),
-                              ),
-                            );
-                          },
-                        ),
+                      return Citycardmenu(
+                        imagename: data['image'],
+                        cityname: data['name'],
+                        callback: (context) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => PlaceDetails(
+                                  image: data['image'],
+                                  name: data['name'],
+                                  numTel: data['numTel'],
+                                  address: data['address'],
+                                  timeOpenClose: data['timeOpenClose'],
+                                  website: data['website'],
+                                  price: data['price'])),
+                            ),
+                          );
+                        },
                       );
                     }).toList());
               } else {
@@ -131,7 +127,7 @@ class DatabaseServices {
         ],
       );
     } else {
-      var newmaxBudget = (maxBudget * 70 / 100) / days;
+      var newmaxBudget = (maxBudget * 70 / 100) / (days - 1);
       print(newmaxBudget);
       return Column(
         children: [
@@ -146,6 +142,7 @@ class DatabaseServices {
             stream: FirebaseFirestore.instance
                 .collection("Place")
                 .where('typePlace', isEqualTo: 'Hotel')
+                .where('price', isLessThanOrEqualTo: newmaxBudget)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -159,28 +156,24 @@ class DatabaseServices {
                         snapshot.data!.docs.map((DocumentSnapshot document) {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
-                      return Visibility(
-                        visible:
-                            newmaxBudget <= data["price"] ? visible : !visible,
-                        child: Citycardmenu(
-                          imagename: data['image'],
-                          cityname: data['name'],
-                          callback: (context) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: ((context) => PlaceDetails(
-                                    image: data['image'],
-                                    name: data['name'],
-                                    numTel: data['numTel'],
-                                    address: data['address'],
-                                    timeOpenClose: data['timeOpenClose'],
-                                    website: data['website'],
-                                    price: data['price'])),
-                              ),
-                            );
-                          },
-                        ),
+                      return Citycardmenu(
+                        imagename: data['image'],
+                        cityname: data['name'],
+                        callback: (context) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => PlaceDetails(
+                                  image: data['image'],
+                                  name: data['name'],
+                                  numTel: data['numTel'],
+                                  address: data['address'],
+                                  timeOpenClose: data['timeOpenClose'],
+                                  website: data['website'],
+                                  price: data['price'])),
+                            ),
+                          );
+                        },
                       );
                     }).toList());
               } else {

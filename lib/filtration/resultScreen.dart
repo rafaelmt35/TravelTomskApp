@@ -23,6 +23,7 @@ class ResultFiltration extends StatefulWidget {
 class _ResultFiltrationState extends State<ResultFiltration> {
   var listDocs;
   var databaseservice = DatabaseServices();
+  List<DocumentReference>? listDocRef;
   int priceMuseumTemp = 0;
   int priceparkTemp = 0;
   int priceMallTemp = 0;
@@ -67,6 +68,9 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                 ),
                 databaseservice.getHotels(
                     widget.maxBudget, widget.choices, widget.days),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
