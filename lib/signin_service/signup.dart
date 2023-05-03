@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/homepage.dart';
 import 'package:travel_app/signin_service/signin.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../main.dart';
+import 'googlesignin.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -12,15 +19,38 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController emailcontroller = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
-  TextEditingController usernamecontroller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController emailcontroller = new TextEditingController();
+  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController usernamecontroller = new TextEditingController();
+  bool visibleAlert = false;
+
   @override
   Widget build(BuildContext context) {
+    Future SignUp() async {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailcontroller.text.trim(),
+            password: passwordcontroller.text.trim());
+      } on FirebaseAuthException catch (e) {
+        print(e);
+      }
+      navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           backgroundColor: Colors.black,
+          resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Container(
               color: maincolor,
@@ -37,9 +67,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 40,
-                      ),
                       const Center(
                         child: Icon(
                           Icons.travel_explore,
@@ -57,16 +84,27 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 50,
+                        height: 30,
                       ),
                       textFieldandCommand(emailcontroller, 'Email Address',
                           'Enter your email address'),
                       textFieldandCommand(usernamecontroller, 'Username',
                           'Enter your username'),
-                      textFieldandCommand(passwordcontroller, 'Password',
-                          'Enter your password'),
                       const SizedBox(
-                        height: 50,
+                        height: 15,
+                      ),
+                      const Text(
+                        'Password',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      PasswordTextField(
+                          passwordcontroller: passwordcontroller,
+                          command: 'Password'),
+                      const SizedBox(
+                        height: 25,
                       ),
                       Center(
                         child: SizedBox(
@@ -82,10 +120,14 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) => SignInPage())));
+                              SignUp();
+                              FirebaseFirestore.instance
+                                  .collection('Account')
+                                  .add({
+                                'email': emailcontroller.text,
+                                'uid': FirebaseAuth.instance.currentUser?.uid,
+                                'username': usernamecontroller.text
+                              });
                             },
                             child: Center(
                               child: Text(
@@ -95,6 +137,32 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 15.0,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const FaIcon(
+                            FontAwesomeIcons.google,
+                            color: Colors.red,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ClickackbleText(
+                            color: Colors.black,
+                            command: 'Sign up with Google',
+                            callback: (context) {
+                              final provider =
+                                  Provider.of<GoogleSignInProvider>(context,
+                                      listen: false);
+                              provider.googleLogin();
+                            },
+                          )
+                        ],
                       ),
                       const SizedBox(
                         height: 15.0,

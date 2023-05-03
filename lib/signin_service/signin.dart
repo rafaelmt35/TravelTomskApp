@@ -1,8 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/homepage.dart';
 import 'package:travel_app/signin_service/signup.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
+
+import '../main.dart';
+import 'googlesignin.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -14,11 +21,41 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+
+  bool visibleAlert = false;
+  @override
+  void dispose() {
+    emailcontroller.dispose();
+    passwordcontroller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future SignInEmailPass() async {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailcontroller.text.trim(),
+            password: passwordcontroller.text.trim());
+      } on FirebaseAuthException catch (e) {
+        print(e);
+      }
+
+      navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.black,
           body: SafeArea(
             child: Container(
@@ -89,18 +126,15 @@ class _SignInPageState extends State<SignInPage> {
                           width: 180,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: maincolor,
-                                onPrimary: Colors.white,
+                                foregroundColor: Colors.white,
+                                backgroundColor: maincolor,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.circular(10), // <-- Radius
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => HomePage())));
+                                SignInEmailPass();
                               },
                               child: Center(
                                 child: Text(

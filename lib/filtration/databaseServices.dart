@@ -185,4 +185,13 @@ class DatabaseServices {
       );
     }
   }
+
+  Future getPlaceNameList(List<String> placeList, String collectionName) async {
+    var placeCollection =
+        await FirebaseFirestore.instance.collection(collectionName).get();
+    for (int i = 0; i < placeCollection.docs.length; i++) {
+      placeList.add(placeCollection.docs[i]['name']);
+    }
+    print(placeList);
+  }
 }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
-import 'package:travel_app/databaseservices.dart';
+
 import 'package:travel_app/placeDetails.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 

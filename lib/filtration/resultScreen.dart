@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/filtration/function.dart';
+import 'package:travel_app/filtration/databaseServices.dart';
 import 'package:travel_app/homepage.dart';
 
 import '../const.dart';

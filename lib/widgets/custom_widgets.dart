@@ -255,6 +255,7 @@ Widget customTextFieldLogIn(TextEditingController controller, String command) {
         borderRadius: BorderRadius.circular(15)),
     height: 60,
     child: TextFormField(
+      autofocus: true,
       controller: controller,
       decoration: InputDecoration(
         border: InputBorder.none,
@@ -449,5 +450,3 @@ class ClickackbleText extends StatelessWidget {
     );
   }
 }
-
-

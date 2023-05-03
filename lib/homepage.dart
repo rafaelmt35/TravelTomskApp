@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/databaseservices.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+
+import 'package:travel_app/filtration/databaseServices.dart';
 import 'package:travel_app/filtration/selecthowmanydays.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/menus/placesScreen.dart';
 import 'package:travel_app/placeDetails.dart';
-import 'package:travel_app/signin_service/signin.dart';
+import 'package:travel_app/signin_service/googlesignin.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/signin_service/signup.dart';
 import 'widgets/custom_widgets.dart';
+
+class ConFirmation extends StatelessWidget {
+  const ConFirmation({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text('Something went wrong'),
+            );
+          } else if (snapshot.hasData) {
+            return const HomePage();
+          } else {
+            return const SignUpPage();
+          }
+        },
+      ),
+    );
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,10 +51,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<String> placeList = [];
-
+  var databaseservice = DatabaseServices();
+  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-    getPlaceNameList(placeList, 'Place');
+    databaseservice.getPlaceNameList(placeList, 'Place');
     super.initState();
   }
 
@@ -72,12 +105,15 @@ class _HomePageState extends State<HomePage> {
                                 FloatingActionButton(
                                   heroTag: null,
                                   elevation: 0.0,
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: ((context) =>
-                                                SignInPage())));
+                                  onPressed: () async {
+                                    FirebaseAuth
+                                        .instance.currentUser?.providerData;
+                                    await FirebaseAuth.instance.signOut();
+                                    final provider =
+                                        Provider.of<GoogleSignInProvider>(
+                                            context,
+                                            listen: false);
+                                    provider.googleLogOut();
                                   },
                                   backgroundColor: Colors.transparent,
                                   splashColor: Colors.grey.withOpacity(0.4),
