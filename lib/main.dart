@@ -50,7 +50,9 @@ class InitialPage extends StatelessWidget {
               child: Text('Something went wrong'),
             );
           } else if (snapshot.hasData) {
-            return const HomePage();
+            return HomePage(
+              signInWithoutGoogle: true,
+            );
           } else {
             return const SignUpPage();
           }

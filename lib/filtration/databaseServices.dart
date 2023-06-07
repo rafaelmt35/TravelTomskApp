@@ -68,10 +68,11 @@ class DatabaseServices {
     );
   }
 
-  getHotels(int maxBudget, String choice, int days) {
+  getHotels(int maxBudget, String choice, int days, int rooms) {
+    print('choice : ${choice}');
     if (choice == 'Travel Place') {
-      var newmaxBudget = (maxBudget - (maxBudget * 70 / 100)) / (days - 1);
-      print(newmaxBudget);
+      var newmaxBudget = ((maxBudget * 30 / 100) / rooms) / (days - 1);
+      print('travel place = ${newmaxBudget}');
       return Column(
         children: [
           Container(
@@ -127,8 +128,8 @@ class DatabaseServices {
         ],
       );
     } else {
-      var newmaxBudget = (maxBudget * 70 / 100) / (days - 1);
-      print(newmaxBudget);
+      var newmaxBudget = ((maxBudget * 70 / 100) / rooms) / (days - 1);
+      print('ACCOMODATION : ${newmaxBudget}');
       return Column(
         children: [
           Container(

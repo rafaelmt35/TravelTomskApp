@@ -50,6 +50,13 @@ class _SignInPageState extends State<SignInPage> {
       }
 
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage(
+                    signInWithoutGoogle: true,
+                  )));
     }
 
     return MaterialApp(

@@ -10,12 +10,18 @@ import '../widgets/custom_widgets.dart';
 class ResultFiltration extends StatefulWidget {
   const ResultFiltration(
       {super.key,
+      required this.signInWithoutGoogle,
       required this.days,
       required this.choices,
-      required this.maxBudget});
+      required this.maxBudget,
+      required this.rooms,
+      required this.selectedplaces});
   final int days;
+  final int rooms;
+  final List<String> selectedplaces;
   final String choices;
   final int maxBudget;
+  final bool signInWithoutGoogle;
   @override
   State<ResultFiltration> createState() => _ResultFiltrationState();
 }
@@ -27,13 +33,16 @@ class _ResultFiltrationState extends State<ResultFiltration> {
   int priceMuseumTemp = 0;
   int priceparkTemp = 0;
   int priceMallTemp = 0;
+
   @override
   void initState() {
+    print(widget.choices);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    int len = widget.selectedplaces.length;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -54,20 +63,12 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   style: const TextStyle(
                       fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
-                databaseservice.getQueriesResult(
-                  'Museum',
-                  widget.days,
-                ),
-                databaseservice.getQueriesResult(
-                  'Park',
-                  widget.days,
-                ),
-                databaseservice.getQueriesResult(
-                  'Mall',
-                  widget.days,
-                ),
-                databaseservice.getHotels(
-                    widget.maxBudget, widget.choices, widget.days),
+                for (var res in widget.selectedplaces)
+                  databaseservice.getQueriesResult(res, widget.days),
+                
+                Text(widget.choices),
+                databaseservice.getHotels(widget.maxBudget, widget.choices,
+                    widget.days, widget.rooms),
                 const SizedBox(
                   height: 20,
                 ),
@@ -83,8 +84,10 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const HomePage())));
+                                      builder: ((context) => HomePage(
+                                            signInWithoutGoogle:
+                                                widget.signInWithoutGoogle,
+                                          ))));
                             },
                             command: 'BACK TO HOME'))
                   ],

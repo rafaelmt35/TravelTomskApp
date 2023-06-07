@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/preferenceplace.dart';
 import 'package:travel_app/const.dart';
+import 'package:travel_app/filtration/setMaxBudget.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 
-class CountDays extends StatefulWidget {
-  const CountDays({Key? key, required this.signInWithoutGoogle})
+class CountPersonForRoom extends StatefulWidget {
+  const CountPersonForRoom(
+      {Key? key,
+      required this.signInWithoutGoogle,
+      required this.days,
+      required this.selectedplaces,
+      required this.choices})
       : super(key: key);
+  final int days;
+  final List<String> selectedplaces;
   final bool signInWithoutGoogle;
+  final String choices;
   @override
-  State<CountDays> createState() => _CountDaysState();
+  State<CountPersonForRoom> createState() => _CountPersonForRoomState();
 }
 
-class _CountDaysState extends State<CountDays> {
+class _CountPersonForRoomState extends State<CountPersonForRoom> {
   TextEditingController controllerInput = TextEditingController();
+
+  @override
+  void initState() {
+    print(widget.choices);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +52,9 @@ class _CountDaysState extends State<CountDays> {
                       height: 10,
                     ),
                     const Text(
-                      'Сколько дней вы хотите путешествовать в Томске?',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      'Сколько комнат/номер вам нужны?',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 15,
@@ -62,7 +78,8 @@ class _CountDaysState extends State<CountDays> {
                                     color: Colors.black,
                                     width: 5,
                                     style: BorderStyle.solid),
-                                borderRadius: BorderRadius.all(Radius.circular(10))),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                             contentPadding: EdgeInsets.only(left: 10, top: 5),
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             fillColor: Colors.white,
@@ -79,12 +96,15 @@ class _CountDaysState extends State<CountDays> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => PreferencePlace(
+                                      builder: ((context) => SetMaxBudget(
+                                            rooms:
+                                                int.parse(controllerInput.text),
                                             signInWithoutGoogle:
                                                 widget.signInWithoutGoogle,
-                                            days: controllerInput.text == ''
-                                                ? 0
-                                                : int.parse(controllerInput.text),
+                                            days: widget.days,
+                                            selectedplaces:
+                                                widget.selectedplaces,
+                                            choices: widget.choices,
                                           ))));
                             },
                             command: 'NEXT PAGE'))

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/filtration/placesToVisit.dart';
 import 'package:travel_app/filtration/setMaxBudget.dart';
 
 import '../const.dart';
 import '../widgets/custom_widgets.dart';
 
 class PreferencePlace extends StatefulWidget {
-  const PreferencePlace({super.key, required this.days});
+  const PreferencePlace(
+      {super.key, required this.days, required this.signInWithoutGoogle});
   final int days;
+  final bool signInWithoutGoogle;
   @override
   State<PreferencePlace> createState() => _PreferencePlaceState();
 }
@@ -84,9 +87,11 @@ class _PreferencePlaceState extends State<PreferencePlace> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: ((context) => SetMaxBudget(
+                                builder: ((context) => placesToVisit(
+                                      signInWithoutGoogle:
+                                          widget.signInWithoutGoogle,
                                       choices: _choose == Choose.travelplaces
-                                          ? 'Travel Place '
+                                          ? 'Travel Place'
                                           : 'Accomodation',
                                       days: widget.days,
                                     ))));

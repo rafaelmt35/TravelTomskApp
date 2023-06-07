@@ -43,7 +43,9 @@ class _SignUpPageState extends State<SignUpPage> {
       } on FirebaseAuthException catch (e) {
         print(e);
       }
-      navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage(signInWithoutGoogle: true,)));
     }
 
     return MaterialApp(
