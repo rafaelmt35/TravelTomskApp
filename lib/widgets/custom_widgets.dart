@@ -123,6 +123,7 @@ class Citycardmenu extends StatelessWidget {
         onTap: () => callback.call(context),
         child: Container(
             width: 172,
+            height: 180,
             decoration: BoxDecoration(
                 // ignore: unnecessary_new
                 image: new DecorationImage(

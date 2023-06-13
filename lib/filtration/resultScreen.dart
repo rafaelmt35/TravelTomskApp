@@ -29,19 +29,38 @@ class ResultFiltration extends StatefulWidget {
 class _ResultFiltrationState extends State<ResultFiltration> {
   var listDocs;
   var databaseservice = DatabaseServices();
-  List<DocumentReference>? listDocRef;
+  var listDocRef;
   int priceMuseumTemp = 0;
   int priceparkTemp = 0;
   int priceMallTemp = 0;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Future<void> printDocumentReferences() async {
+    for (var res1 in widget.selectedplaces) {
+      List<DocumentReference<Object?>> documentReferences =
+          await databaseservice.getDocRefPlaces(res1, widget.days);
+      print(documentReferences);
+      // listDocRef.add(await databaseservice.getDocRefPlaces(res1, widget.days));
+    }
+
+    List<DocumentReference<Object?>> docRefsHotel =
+        await databaseservice.getDocRefHotels(
+            widget.maxBudget, widget.choices, widget.days, widget.rooms);
+    print(docRefsHotel);
+    // listDocRef.add(await databaseservice.getDocRefHotels(
+    //     widget.maxBudget, widget.choices, widget.days, widget.rooms));
+  }
 
   @override
   void initState() {
     print(widget.choices);
+    printDocumentReferences();
+    print(listDocRef);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController nametripsave = TextEditingController();
     int len = widget.selectedplaces.length;
     return SafeArea(
       child: Scaffold(
@@ -65,8 +84,6 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                 ),
                 for (var res in widget.selectedplaces)
                   databaseservice.getQueriesResult(res, widget.days),
-                
-                Text(widget.choices),
                 databaseservice.getHotels(widget.maxBudget, widget.choices,
                     widget.days, widget.rooms),
                 const SizedBox(
@@ -76,8 +93,71 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Center(
-                        child:
-                            ButtonGo(callback: (context) {}, command: 'SAVE')),
+                        child: ButtonGo(
+                            callback: (context) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Enter Name for saving trip'),
+                                    content: TextFormField(
+                                      controller: nametripsave,
+                                      decoration: InputDecoration(
+                                        hintText: 'Type something...',
+                                      ),
+                                    ),
+                                    actions: [
+                                      ButtonGo(
+                                        callback: (context) {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                        },
+                                        command: 'Cancel',
+                                      ),
+                                      ButtonGo(
+                                        callback: (context) {
+                                          for (var res1
+                                              in widget.selectedplaces) {
+                                            listDocRef?.add(databaseservice
+                                                    .getDocRefPlaces(
+                                                        res1, widget.days)
+                                                as DocumentReference<Object?>);
+                                          }
+                                          listDocRef?.add(databaseservice
+                                                  .getDocRefHotels(
+                                                      widget.maxBudget,
+                                                      widget.choices,
+                                                      widget.days,
+                                                      widget.rooms)
+                                              as DocumentReference<Object?>);
+                                          String enteredText =
+                                              nametripsave.text;
+                                          Map<String, dynamic> data = {
+                                            'name': enteredText,
+                                            'totalCost': widget.maxBudget,
+                                            'Places': listDocRef
+                                          };
+                                          firestore
+                                              .collection('Trip')
+                                              .add(data)
+                                              .then((value) {
+                                            print('Data added successfully!');
+                                          }).catchError((error) {
+                                            print('Error adding data: $error');
+                                          });
+                                          print('Entered text: $enteredText');
+
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                        },
+                                        command: 'Save',
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            command: 'SAVE')),
                     Center(
                         child: ButtonGo(
                             callback: (context) {

@@ -5,6 +5,47 @@ import '../placeDetails.dart';
 import '../widgets/custom_widgets.dart';
 
 class DatabaseServices {
+  Future<List<DocumentReference>> getDocRefPlaces(
+      String params, int days) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("Place")
+        .where('typePlace', isEqualTo: params)
+        .limit(days)
+        .get();
+
+    List<DocumentReference> documentReferences =
+        querySnapshot.docs.map((doc) => doc.reference).toList();
+
+    return documentReferences;
+  }
+
+  Future<List<DocumentReference>> getDocRefHotels(
+      int maxBudget, String choice, int days, int rooms) async {
+    if (choice == 'Travel Place') {
+      var newmaxBudget = ((maxBudget * 30 / 100) / rooms) / (days - 1);
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("Place")
+          .where('typePlace', isEqualTo: 'Hotel')
+          .where('price', isLessThanOrEqualTo: newmaxBudget)
+          .get();
+      List<QueryDocumentSnapshot> documentSnapshots = querySnapshot.docs;
+      List<DocumentReference> documentReferences =
+          documentSnapshots.map((doc) => doc.reference).toList();
+      return documentReferences;
+    } else {
+      var newmaxBudget = ((maxBudget * 70 / 100) / rooms) / (days - 1);
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("Place")
+          .where('typePlace', isEqualTo: 'Hotel')
+          .where('price', isLessThanOrEqualTo: newmaxBudget)
+          .get();
+      List<QueryDocumentSnapshot> documentSnapshots = querySnapshot.docs;
+      List<DocumentReference> documentReferences =
+          documentSnapshots.map((doc) => doc.reference).toList();
+      return documentReferences;
+    }
+  }
+
   getQueriesResult(
     String params,
     int days,
