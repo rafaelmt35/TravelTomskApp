@@ -27,9 +27,8 @@ class ResultFiltration extends StatefulWidget {
 }
 
 class _ResultFiltrationState extends State<ResultFiltration> {
-  var listDocs;
   var databaseservice = DatabaseServices();
-  var listDocRef;
+  var listDocRef = [];
   int priceMuseumTemp = 0;
   int priceparkTemp = 0;
   int priceMallTemp = 0;
@@ -39,22 +38,28 @@ class _ResultFiltrationState extends State<ResultFiltration> {
       List<DocumentReference<Object?>> documentReferences =
           await databaseservice.getDocRefPlaces(res1, widget.days);
       print(documentReferences);
-      // listDocRef.add(await databaseservice.getDocRefPlaces(res1, widget.days));
+
+      for (int i = 0; i < documentReferences.length; i++) {
+        listDocRef.add(documentReferences[i]);
+      }
     }
 
     List<DocumentReference<Object?>> docRefsHotel =
         await databaseservice.getDocRefHotels(
             widget.maxBudget, widget.choices, widget.days, widget.rooms);
     print(docRefsHotel);
+    for (int i = 0; i < docRefsHotel.length; i++) {
+      listDocRef.add(docRefsHotel[i]);
+    }
     // listDocRef.add(await databaseservice.getDocRefHotels(
     //     widget.maxBudget, widget.choices, widget.days, widget.rooms));
+    print('docref ${listDocRef}');
   }
 
   @override
   void initState() {
     print(widget.choices);
     printDocumentReferences();
-    print(listDocRef);
     super.initState();
   }
 
@@ -65,7 +70,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Result'),
+          title: const Text('Result'),
           backgroundColor: maincolor,
         ),
         body: Container(
@@ -99,10 +104,11 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Enter Name for saving trip'),
+                                    title: const Text(
+                                        'Enter Name for saving trip'),
                                     content: TextFormField(
                                       controller: nametripsave,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         hintText: 'Type something...',
                                       ),
                                     ),
@@ -116,26 +122,15 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                       ),
                                       ButtonGo(
                                         callback: (context) {
-                                          for (var res1
-                                              in widget.selectedplaces) {
-                                            listDocRef?.add(databaseservice
-                                                    .getDocRefPlaces(
-                                                        res1, widget.days)
-                                                as DocumentReference<Object?>);
-                                          }
-                                          listDocRef?.add(databaseservice
-                                                  .getDocRefHotels(
-                                                      widget.maxBudget,
-                                                      widget.choices,
-                                                      widget.days,
-                                                      widget.rooms)
-                                              as DocumentReference<Object?>);
                                           String enteredText =
                                               nametripsave.text;
                                           Map<String, dynamic> data = {
                                             'name': enteredText,
                                             'totalCost': widget.maxBudget,
-                                            'Places': listDocRef
+                                            'Places': listDocRef,
+                                            'days': widget.days,
+                                            'rooms': widget.rooms,
+                                            'choice': widget.choices,
                                           };
                                           firestore
                                               .collection('Trip')
@@ -145,10 +140,12 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                           }).catchError((error) {
                                             print('Error adding data: $error');
                                           });
-                                          print('Entered text: $enteredText');
-
-                                          Navigator.pop(
-                                              context); // Close the dialog
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: ((context) => HomePage(
+                                                      signInWithoutGoogle: widget
+                                                          .signInWithoutGoogle))));
                                         },
                                         command: 'Save',
                                       ),

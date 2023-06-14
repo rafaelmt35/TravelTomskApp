@@ -1,8 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../const.dart';
-import '../placeDetails.dart';
 
 class Nexttripmenu extends StatelessWidget {
   final String imagename;
@@ -31,7 +27,7 @@ class Nexttripmenu extends StatelessWidget {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
+                offset: const Offset(0, 3), // changes position of shadow
               ),
             ],
           ),
@@ -53,7 +49,7 @@ class Nexttripmenu extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(10, 8, 0, 0),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Container(
+                  child: SizedBox(
                     height: 144,
                     width: 201,
                     child: Column(
@@ -63,7 +59,7 @@ class Nexttripmenu extends StatelessWidget {
                           alignment: Alignment.topLeft,
                           child: Text(
                             title,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -71,7 +67,7 @@ class Nexttripmenu extends StatelessWidget {
                           alignment: Alignment.topLeft,
                           child: Text(
                             desc,
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         Align(
@@ -81,10 +77,10 @@ class Nexttripmenu extends StatelessWidget {
                             width: 20,
                             child: FloatingActionButton(
                               heroTag: null,
-                              backgroundColor: Color(0xff588CDA),
+                              backgroundColor:const Color(0xff588CDA),
                               elevation: 0.2,
                               onPressed: () {},
-                              child: Icon(
+                              child: const Icon(
                                 Icons.double_arrow_outlined,
                                 size: 18,
                                 color: Colors.white,
@@ -135,7 +131,7 @@ class Citycardmenu extends StatelessWidget {
               alignment: Alignment.bottomLeft,
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(10),
                     bottomRight: Radius.circular(10),
                   ),
@@ -147,7 +143,7 @@ class Citycardmenu extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     cityname,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -180,7 +176,7 @@ class Smallmenubox extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               elevation: 5,
-              primary: Color(0xffEDF2F8),
+             primary : Color(0xffEDF2F8),
               onPrimary: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10), // <-- Radius
@@ -250,7 +246,7 @@ Widget CommandWidget(String command, Function callback) {
 
 Widget customTextFieldLogIn(TextEditingController controller, String command) {
   return Container(
-    padding: EdgeInsets.all(5.0),
+    padding: const EdgeInsets.all(5.0),
     decoration: BoxDecoration(
         border: Border.all(width: 0.8),
         borderRadius: BorderRadius.circular(15)),
@@ -338,7 +334,7 @@ class ButtonMenuLong extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.grey,
-          backgroundColor: Color(0xffEDF2F8),
+          backgroundColor: const Color(0xffEDF2F8),
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10), // <-- Radius
@@ -419,7 +415,7 @@ Widget textFieldandCommand(
       ),
       Text(
         command,
-        style: TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 16),
       ),
       const SizedBox(
         height: 15,

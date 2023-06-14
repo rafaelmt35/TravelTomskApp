@@ -43,15 +43,17 @@ class _CollectionTripsState extends State<CollectionTrips> {
                       documents[index].data() as Map<String, dynamic>?;
                   String? tripName = data?['name'];
                   int? totalCost = data?['totalCost'];
-                  List<dynamic>? referenceArray = data?['Places'];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: ((context) => TripPage(
+                                  choice: data?['choice'],
                                   name: data?['name'],
                                   totalCost: data?['totalCost'],
+                                  days: data?['days'],
+                                  rooms: data?['rooms'],
                                   places: data?['Places']))));
                     },
                     child: Container(
