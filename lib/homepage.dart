@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Hotels',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => const TypePlaceScreen(
+                              builder: (context) => const TypePlaceScreen(
                                     typePlace: 'Hotel',
                                   )));
                         },
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Restaurant',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => const TypePlaceScreen(
+                              builder: (context) => const TypePlaceScreen(
                                   typePlace: 'Restaurant')));
                         },
                       ),
@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Park',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) =>
+                              builder: (context) =>
                                   const TypePlaceScreen(typePlace: 'Park')));
                         },
                       ),
@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Cafe',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) =>
+                              builder: (context) =>
                                   const TypePlaceScreen(typePlace: 'Cafe')));
                         },
                       ),
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'Pharmacy',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) =>
+                            builder: (context) =>
                                 const TypePlaceScreen(typePlace: 'Apotek')));
                       },
                     ),
@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'Museum',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) =>
+                            builder: (context) =>
                                 const TypePlaceScreen(typePlace: 'Museum')));
                       },
                     ),
@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'Malls',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) =>
+                            builder: (context) =>
                                 const TypePlaceScreen(typePlace: 'Mall')));
                       },
                     ),
@@ -250,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'University',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => const TypePlaceScreen(
+                            builder: (context) => const TypePlaceScreen(
                                 typePlace: 'University')));
                       },
                     ),
