@@ -4,7 +4,7 @@ import 'package:travel_app/filtration/databaseServices.dart';
 import 'package:travel_app/homepage.dart';
 
 import '../const.dart';
-import '../placeDetails.dart';
+
 import '../widgets/custom_widgets.dart';
 
 class ResultFiltration extends StatefulWidget {

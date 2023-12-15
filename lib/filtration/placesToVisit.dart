@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/filtration/setHowManyPersonforHotel.dart';
-import 'package:travel_app/filtration/setMaxBudget.dart';
+import 'package:travel_app/filtration/preferencePriceRestaurant.dart';
 
 import '../const.dart';
 import '../widgets/custom_widgets.dart';
@@ -10,11 +9,14 @@ class placesToVisit extends StatefulWidget {
     super.key,
     required this.days,
     required this.signInWithoutGoogle,
-    required this.choices,
+    required this.hotelBudget,
+    required this.rooms,
   });
   final int days;
+  final int hotelBudget;
   final bool signInWithoutGoogle;
-  final String choices;
+  final int rooms;
+
   @override
   State<placesToVisit> createState() => _placesToVisitState();
 }
@@ -31,7 +33,6 @@ class _placesToVisitState extends State<placesToVisit> {
 
   @override
   void initState() {
-    print(widget.choices);
     super.initState();
   }
 
@@ -127,12 +128,13 @@ class _placesToVisitState extends State<placesToVisit> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => CountPersonForRoom(
+                                  builder: ((context) =>
+                                      PreferenceRestaurantPrice(
                                         selectedplaces: selectedplaces,
                                         signInWithoutGoogle:
                                             widget.signInWithoutGoogle,
-                                        choices: widget.choices,
                                         days: widget.days,
+                                        rooms: widget.rooms,
                                       ))));
                         },
                         command: 'NEXT PAGE'))

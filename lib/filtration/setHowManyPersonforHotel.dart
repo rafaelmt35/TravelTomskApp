@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/filtration/preferenceplace.dart';
+import 'package:travel_app/filtration/placesToVisit.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/filtration/setMaxBudget.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
@@ -9,13 +9,12 @@ class CountPersonForRoom extends StatefulWidget {
       {Key? key,
       required this.signInWithoutGoogle,
       required this.days,
-      required this.selectedplaces,
-      required this.choices})
+      required this.hotelBudget})
       : super(key: key);
   final int days;
-  final List<String> selectedplaces;
+  final int hotelBudget;
   final bool signInWithoutGoogle;
-  final String choices;
+
   @override
   State<CountPersonForRoom> createState() => _CountPersonForRoomState();
 }
@@ -25,7 +24,6 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
 
   @override
   void initState() {
-    print(widget.choices);
     super.initState();
   }
 
@@ -96,15 +94,13 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => SetMaxBudget(
-                                            rooms:
-                                                int.parse(controllerInput.text),
+                                      builder: ((context) => placesToVisit(
                                             signInWithoutGoogle:
                                                 widget.signInWithoutGoogle,
                                             days: widget.days,
-                                            selectedplaces:
-                                                widget.selectedplaces,
-                                            choices: widget.choices,
+                                            hotelBudget: widget.hotelBudget,
+                                            rooms:
+                                                int.parse(controllerInput.text),
                                           ))));
                             },
                             command: 'NEXT PAGE'))

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/filtration/preferenceplace.dart';
+import 'package:travel_app/filtration/getBudgetHotel.dart';
+
 import 'package:travel_app/const.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 
@@ -38,7 +39,8 @@ class _CountDaysState extends State<CountDays> {
                     ),
                     const Text(
                       'Сколько дней вы хотите путешествовать в Томске?',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 15,
@@ -62,7 +64,8 @@ class _CountDaysState extends State<CountDays> {
                                     color: Colors.black,
                                     width: 5,
                                     style: BorderStyle.solid),
-                                borderRadius: BorderRadius.all(Radius.circular(10))),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
                             contentPadding: EdgeInsets.only(left: 10, top: 5),
                             hintStyle: TextStyle(fontStyle: FontStyle.italic),
                             fillColor: Colors.white,
@@ -79,12 +82,13 @@ class _CountDaysState extends State<CountDays> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => PreferencePlace(
+                                      builder: ((context) => setBudgetHotel(
                                             signInWithoutGoogle:
                                                 widget.signInWithoutGoogle,
                                             days: controllerInput.text == ''
                                                 ? 0
-                                                : int.parse(controllerInput.text),
+                                                : int.parse(
+                                                    controllerInput.text),
                                           ))));
                             },
                             command: 'NEXT PAGE'))

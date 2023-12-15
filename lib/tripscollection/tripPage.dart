@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 
-import '../placeDetails.dart';
-
 class TripPage extends StatefulWidget {
   const TripPage(
       {super.key,
@@ -122,19 +120,19 @@ class _TripPageState extends State<TripPage> {
                           imagename: data?['image'],
                           cityname: data?['name'],
                           callback: (context) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: ((context) => PlaceDetails(
-                                    image: data?['image'],
-                                    name: data?['name'],
-                                    numTel: data?['numTel'],
-                                    address: data?['address'],
-                                    timeOpenClose: data?['timeOpenClose'],
-                                    website: data?['website'],
-                                    price: data?['price'])),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: ((context) => PlaceDetails(
+                            //         image: data?['image'],
+                            //         name: data?['name'],
+                            //         numTel: data?['numTel'],
+                            //         address: data?['address'],
+                            //         timeOpenClose: data?['timeOpenClose'],
+                            //         website: data?['website'],
+                            //         price: data?['price'])),
+                            //   ),
+                            // );
                           },
                         );
                       } else if (snapshot.hasError) {

@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/filtration/databaseServices.dart';
 import 'package:travel_app/filtration/selecthowmanydays.dart';
 import 'package:travel_app/const.dart';
-import 'package:travel_app/menus/placesScreen.dart';
-import 'package:travel_app/placeDetails.dart';
+
 import 'package:travel_app/signin_service/googlesignin.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/test.dart';
 import 'package:travel_app/tripscollection/collectiontrip.dart';
 
 import 'widgets/custom_widgets.dart';
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CollectionTrips()));
+                                builder: (context) => const CollectionTrips()));
                       },
                       command: 'COLLECTION',
                       iconname: Icons.collections,
@@ -180,8 +180,8 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Hotels',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const TypePlaceScreen(
-                                    typePlace: 'Hotel',
+                              builder: (context) => const PlaceSearchPage(
+                                    query: 'hotel',
                                   )));
                         },
                       ),
@@ -190,8 +190,9 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Restaurant',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const TypePlaceScreen(
-                                  typePlace: 'Restaurant')));
+                              builder: (context) => const PlaceSearchPage(
+                                    query: 'restaurant',
+                                  )));
                         },
                       ),
                       Smallmenubox(
@@ -199,8 +200,9 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Park',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const TypePlaceScreen(typePlace: 'Park')));
+                              builder: (context) => const PlaceSearchPage(
+                                    query: 'park',
+                                  )));
                         },
                       ),
                       Smallmenubox(
@@ -208,8 +210,9 @@ class _HomePageState extends State<HomePage> {
                         menuname: 'Cafe',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const TypePlaceScreen(typePlace: 'Cafe')));
+                              builder: (context) => const PlaceSearchPage(
+                                    query: 'cafe',
+                                  )));
                         },
                       ),
                     ],
@@ -223,8 +226,9 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'Pharmacy',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const TypePlaceScreen(typePlace: 'Apotek')));
+                            builder: (context) => const PlaceSearchPage(
+                                  query: 'pharmacy',
+                                )));
                       },
                     ),
                     Smallmenubox(
@@ -232,8 +236,9 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'Museum',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const TypePlaceScreen(typePlace: 'Museum')));
+                            builder: (context) => const PlaceSearchPage(
+                                  query: 'museums',
+                                )));
                       },
                     ),
                     Smallmenubox(
@@ -241,8 +246,9 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'Malls',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                const TypePlaceScreen(typePlace: 'Mall')));
+                            builder: (context) => const PlaceSearchPage(
+                                  query: 'malls',
+                                )));
                       },
                     ),
                     Smallmenubox(
@@ -250,8 +256,9 @@ class _HomePageState extends State<HomePage> {
                       menuname: 'University',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const TypePlaceScreen(
-                                typePlace: 'University')));
+                            builder: (context) => const PlaceSearchPage(
+                                  query: 'university',
+                                )));
                       },
                     ),
                   ],
@@ -277,31 +284,7 @@ class _HomePageState extends State<HomePage> {
                                                 (e.data() as dynamic)['image'],
                                             cityname:
                                                 (e.data() as dynamic)['name'],
-                                            callback: (context) {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: ((context) => PlaceDetails(
-                                                      image: (e.data()
-                                                          as dynamic)['image'],
-                                                      name: (e.data()
-                                                          as dynamic)['name'],
-                                                      numTel: (e.data()
-                                                          as dynamic)['numTel'],
-                                                      address:
-                                                          (e.data() as dynamic)[
-                                                              'address'],
-                                                      timeOpenClose:
-                                                          (e.data() as dynamic)[
-                                                              'timeOpenClose'],
-                                                      website:
-                                                          (e.data() as dynamic)[
-                                                              'website'],
-                                                      price: (e.data()
-                                                          as dynamic)['price'])),
-                                                ),
-                                              );
-                                            },
+                                            callback: (context) {},
                                           ))
                                       .toList());
                             } else {

@@ -56,7 +56,7 @@ class DatabaseServices {
           margin: const EdgeInsets.all(10.0),
           child: Text(
             params,
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
         ),
         StreamBuilder<QuerySnapshot>(
@@ -86,19 +86,19 @@ class DatabaseServices {
                       imagename: data['image'],
                       cityname: data['name'],
                       callback: (context) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => PlaceDetails(
-                                image: data['image'],
-                                name: data['name'],
-                                numTel: data['numTel'],
-                                address: data['address'],
-                                timeOpenClose: data['timeOpenClose'],
-                                website: data['website'],
-                                price: data['price'])),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: ((context) => PlaceDetails(
+                        //         image: data['image'],
+                        //         name: data['name'],
+                        //         numTel: data['numTel'],
+                        //         address: data['address'],
+                        //         timeOpenClose: data['timeOpenClose'],
+                        //         website: data['website'],
+                        //         price: data['price'])),
+                        //   ),
+                        // );
                       },
                     );
                   }).toList());
@@ -145,19 +145,19 @@ class DatabaseServices {
                         imagename: data['image'],
                         cityname: data['name'],
                         callback: (context) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) => PlaceDetails(
-                                  image: data['image'],
-                                  name: data['name'],
-                                  numTel: data['numTel'],
-                                  address: data['address'],
-                                  timeOpenClose: data['timeOpenClose'],
-                                  website: data['website'],
-                                  price: data['price'])),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: ((context) => PlaceDetails(
+                          //         image: data['image'],
+                          //         name: data['name'],
+                          //         numTel: data['numTel'],
+                          //         address: data['address'],
+                          //         timeOpenClose: data['timeOpenClose'],
+                          //         website: data['website'],
+                          //         price: data['price'])),
+                          //   ),
+                          // );
                         },
                       );
                     }).toList());
@@ -202,19 +202,19 @@ class DatabaseServices {
                         imagename: data['image'],
                         cityname: data['name'],
                         callback: (context) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) => PlaceDetails(
-                                  image: data['image'],
-                                  name: data['name'],
-                                  numTel: data['numTel'],
-                                  address: data['address'],
-                                  timeOpenClose: data['timeOpenClose'],
-                                  website: data['website'],
-                                  price: data['price'])),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: ((context) => PlaceDetails(
+                          //         image: data['image'],
+                          //         name: data['name'],
+                          //         numTel: data['numTel'],
+                          //         address: data['address'],
+                          //         timeOpenClose: data['timeOpenClose'],
+                          //         website: data['website'],
+                          //         price: data['price'])),
+                          //   ),
+                          // );
                         },
                       );
                     }).toList());

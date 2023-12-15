@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/apiCall.dart';
 import 'package:travel_app/const.dart';
 import 'package:travel_app/placeDetails.dart';
-import 'package:travel_app/placesClass.dart';
+
 import 'package:travel_app/widgets/custom_widgets.dart';
 import 'package:http/http.dart' as http;
 
@@ -147,9 +147,10 @@ class _TypePlaceScreenState extends State<TypePlaceScreen> {
           body: Container(
             padding: const EdgeInsets.all(8.0),
             child: isLoaded == true
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Adjust as needed
                     ),
                     itemCount: places.length,

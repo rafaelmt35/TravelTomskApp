@@ -1,36 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/filtration/resultScreen.dart';
+import 'package:travel_app/filtration/placesToVisit.dart';
+import 'package:travel_app/filtration/setHowManyPersonforHotel.dart';
 
 import '../const.dart';
 import '../widgets/custom_widgets.dart';
 
-class SetMaxBudget extends StatefulWidget {
-  const SetMaxBudget(
-      {super.key,
-      required this.rooms,
-      required this.selectedplaces,
-      required this.days,
-      required this.choices,
-      required this.signInWithoutGoogle});
+class setBudgetHotel extends StatefulWidget {
+  const setBudgetHotel(
+      {super.key, required this.days, required this.signInWithoutGoogle});
   final int days;
-  final int rooms;
-  final List<String> selectedplaces;
   final bool signInWithoutGoogle;
-  final String choices;
   @override
-  State<SetMaxBudget> createState() => _SetMaxBudgetState();
+  State<setBudgetHotel> createState() => _setBudgetHotelState();
 }
 
-class _SetMaxBudgetState extends State<SetMaxBudget> {
-  TextEditingController controllerBudget = TextEditingController();
+enum Choose { travelplaces, accommodation }
 
-  @override
-  void initState() {
-    print(widget.selectedplaces);
-    print(widget.choices);
-    print(widget.days);
-    super.initState();
-  }
+class _setBudgetHotelState extends State<setBudgetHotel> {
+  TextEditingController controllerBudget = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +27,6 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                widget.selectedplaces.clear();
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back)),
@@ -59,7 +45,7 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                   height: 10,
                 ),
                 const Text(
-                  'Установите максимальный бюджет на поездку!',
+                  'Установите максимальный бюджет для отеля',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
@@ -111,18 +97,15 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => ResultFiltration(
+                                  builder: ((context) => CountPersonForRoom(
+                                        days: widget.days,
                                         signInWithoutGoogle:
                                             widget.signInWithoutGoogle,
-                                        choices: widget.choices,
-                                        days: widget.days,
-                                        maxBudget:
+                                        hotelBudget:
                                             int.parse(controllerBudget.text),
-                                        rooms: widget.rooms,
-                                        selectedplaces: widget.selectedplaces,
                                       ))));
                         },
-                        command: 'FINISH!'))
+                        command: 'Next'))
               ],
             ),
           ),

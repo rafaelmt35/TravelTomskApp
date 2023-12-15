@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/homepage.dart';
 import 'package:travel_app/signin_service/googlesignin.dart';
 import 'package:travel_app/signin_service/signin.dart';
 import 'package:travel_app/signin_service/signup.dart';
+import 'package:travel_app/test.dart';
+import 'dart:io';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +29,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: const InitialPage(),
+        home: HomePage(
+          signInWithoutGoogle: false,
+        ),
       ),
     );
   }
