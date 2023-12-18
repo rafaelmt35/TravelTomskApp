@@ -12,14 +12,18 @@ class ResultFiltration extends StatefulWidget {
       {super.key,
       required this.signInWithoutGoogle,
       required this.days,
-      required this.choices,
       required this.maxBudget,
       required this.rooms,
-      required this.selectedplaces});
+      required this.selectedplaces,
+      required this.choiceFoodRate,
+      required this.hotelBudget,
+      required this.person});
   final int days;
   final int rooms;
+  final int person;
+  final int hotelBudget;
   final List<String> selectedplaces;
-  final String choices;
+  final String choiceFoodRate;
   final int maxBudget;
   final bool signInWithoutGoogle;
   @override
@@ -44,21 +48,20 @@ class _ResultFiltrationState extends State<ResultFiltration> {
       }
     }
 
-    List<DocumentReference<Object?>> docRefsHotel =
-        await databaseservice.getDocRefHotels(
-            widget.maxBudget, widget.choices, widget.days, widget.rooms);
-    print(docRefsHotel);
-    for (int i = 0; i < docRefsHotel.length; i++) {
-      listDocRef.add(docRefsHotel[i]);
-    }
-    // listDocRef.add(await databaseservice.getDocRefHotels(
-    //     widget.maxBudget, widget.choices, widget.days, widget.rooms));
-    print('docref ${listDocRef}');
+    // List<DocumentReference<Object?>> docRefsHotel =
+    //     await databaseservice.getDocRefHotels(
+    //         widget.maxBudget, widget.choices, widget.days, widget.rooms);
+    // print(docRefsHotel);
+    // for (int i = 0; i < docRefsHotel.length; i++) {
+    //   listDocRef.add(docRefsHotel[i]);
+    // }
+    // // listDocRef.add(await databaseservice.getDocRefHotels(
+    // //     widget.maxBudget, widget.choices, widget.days, widget.rooms));
+    // print('docref ${listDocRef}');
   }
 
   @override
   void initState() {
-    print(widget.choices);
     printDocumentReferences();
     super.initState();
   }
@@ -89,8 +92,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                 ),
                 for (var res in widget.selectedplaces)
                   databaseservice.getQueriesResult(res, widget.days),
-                databaseservice.getHotels(widget.maxBudget, widget.choices,
-                    widget.days, widget.rooms),
+                // databaseservice.getHotels(widget.maxBudget, widget.choices,
+                //     widget.days, widget.rooms),
                 const SizedBox(
                   height: 20,
                 ),
@@ -130,7 +133,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                             'Places': listDocRef,
                                             'days': widget.days,
                                             'rooms': widget.rooms,
-                                            'choice': widget.choices,
+                                            // 'choice': widget.choices,
                                           };
                                           firestore
                                               .collection('Trip')

@@ -9,12 +9,16 @@ class PreferenceRestaurantPrice extends StatefulWidget {
   const PreferenceRestaurantPrice(
       {super.key,
       required this.days,
+      required this.person,
       required this.signInWithoutGoogle,
       required this.selectedplaces,
-      required this.rooms});
+      required this.rooms,
+      required this.hotelBudget});
   final int days;
   final bool signInWithoutGoogle;
   final int rooms;
+  final int hotelBudget;
+  final int person;
   final List<String> selectedplaces;
 
   @override
@@ -29,7 +33,7 @@ class _PreferenceRestaurantPriceState extends State<PreferenceRestaurantPrice> {
 
   late bool newvalue;
 
-  Choose? _choose = Choose.notexpensive;
+  Choose? _choose;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -114,17 +118,19 @@ class _PreferenceRestaurantPriceState extends State<PreferenceRestaurantPrice> {
               Center(
                   child: ButtonGo(
                       callback: (context) {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: ((context) => placesToVisit(
-                        //               signInWithoutGoogle:
-                        //                   widget.signInWithoutGoogle,
-                        //               choices: _choose == Choose.travelplaces
-                        //                   ? 'Travel Place'
-                        //                   : 'Accomodation',
-                        //               days: widget.days,
-                        //             ))));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => SetMaxBudget(
+                                      choiceFoodRate: _choose!.toString(),
+                                      signInWithoutGoogle:
+                                          widget.signInWithoutGoogle,
+                                      days: widget.days,
+                                      rooms: widget.rooms,
+                                      selectedplaces: widget.selectedplaces,
+                                      person: widget.person,
+                                      hotelBudget: widget.hotelBudget,
+                                    ))));
                       },
                       command: 'FINISH!'))
             ],

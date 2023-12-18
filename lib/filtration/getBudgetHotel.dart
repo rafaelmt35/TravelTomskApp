@@ -81,7 +81,7 @@ class _setBudgetHotelState extends State<setBudgetHotel> {
                         ),
                       ),
                       const Text(
-                        '₽',
+                        '₽ /ночь',
                         style: TextStyle(
                             fontSize: 30.0, fontWeight: FontWeight.bold),
                       )

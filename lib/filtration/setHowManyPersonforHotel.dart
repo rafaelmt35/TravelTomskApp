@@ -20,7 +20,8 @@ class CountPersonForRoom extends StatefulWidget {
 }
 
 class _CountPersonForRoomState extends State<CountPersonForRoom> {
-  TextEditingController controllerInput = TextEditingController();
+  TextEditingController controllerRoom = TextEditingController();
+  TextEditingController controllerPerson = TextEditingController();
 
   @override
   void initState() {
@@ -68,7 +69,46 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                           color: Colors.white,
                         ),
                         child: TextField(
-                          controller: controllerInput,
+                          controller: controllerRoom,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.black,
+                                    width: 5,
+                                    style: BorderStyle.solid),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            contentPadding: EdgeInsets.only(left: 10, top: 5),
+                            hintStyle: TextStyle(fontStyle: FontStyle.italic),
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'Сколько человек в комнате?',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 10),
+                        width: 350.0,
+                        height: 80.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: TextField(
+                          controller: controllerPerson,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(
@@ -100,7 +140,9 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                                             days: widget.days,
                                             hotelBudget: widget.hotelBudget,
                                             rooms:
-                                                int.parse(controllerInput.text),
+                                                int.parse(controllerRoom.text),
+                                            person: int.parse(
+                                                controllerPerson.text),
                                           ))));
                             },
                             command: 'NEXT PAGE'))

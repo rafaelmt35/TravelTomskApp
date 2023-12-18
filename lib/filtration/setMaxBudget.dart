@@ -10,13 +10,18 @@ class SetMaxBudget extends StatefulWidget {
       required this.rooms,
       required this.selectedplaces,
       required this.days,
-      required this.choices,
-      required this.signInWithoutGoogle});
+      required this.person,
+      required this.signInWithoutGoogle,
+      required this.choiceFoodRate,
+      required this.hotelBudget});
   final int days;
+  final int person;
+  final int hotelBudget;
   final int rooms;
   final List<String> selectedplaces;
   final bool signInWithoutGoogle;
-  final String choices;
+  final String choiceFoodRate;
+
   @override
   State<SetMaxBudget> createState() => _SetMaxBudgetState();
 }
@@ -27,7 +32,7 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
   @override
   void initState() {
     print(widget.selectedplaces);
-    print(widget.choices);
+
     print(widget.days);
     super.initState();
   }
@@ -112,14 +117,16 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                               context,
                               MaterialPageRoute(
                                   builder: ((context) => ResultFiltration(
+                                        person: widget.person,
+                                        hotelBudget: widget.hotelBudget,
                                         signInWithoutGoogle:
                                             widget.signInWithoutGoogle,
-                                        choices: widget.choices,
                                         days: widget.days,
                                         maxBudget:
                                             int.parse(controllerBudget.text),
                                         rooms: widget.rooms,
                                         selectedplaces: widget.selectedplaces,
+                                        choiceFoodRate: widget.choiceFoodRate,
                                       ))));
                         },
                         command: 'FINISH!'))

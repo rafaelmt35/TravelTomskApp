@@ -5,17 +5,18 @@ import '../const.dart';
 import '../widgets/custom_widgets.dart';
 
 class placesToVisit extends StatefulWidget {
-  const placesToVisit({
-    super.key,
-    required this.days,
-    required this.signInWithoutGoogle,
-    required this.hotelBudget,
-    required this.rooms,
-  });
+  const placesToVisit(
+      {super.key,
+      required this.days,
+      required this.signInWithoutGoogle,
+      required this.hotelBudget,
+      required this.rooms,
+      required this.person});
   final int days;
   final int hotelBudget;
   final bool signInWithoutGoogle;
   final int rooms;
+  final int person;
 
   @override
   State<placesToVisit> createState() => _placesToVisitState();
@@ -130,11 +131,13 @@ class _placesToVisitState extends State<placesToVisit> {
                               MaterialPageRoute(
                                   builder: ((context) =>
                                       PreferenceRestaurantPrice(
+                                        hotelBudget : widget.hotelBudget,
                                         selectedplaces: selectedplaces,
                                         signInWithoutGoogle:
                                             widget.signInWithoutGoogle,
                                         days: widget.days,
                                         rooms: widget.rooms,
+                                        person: widget.person,
                                       ))));
                         },
                         command: 'NEXT PAGE'))
