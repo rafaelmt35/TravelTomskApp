@@ -132,7 +132,7 @@ class _PreferenceRestaurantPriceState extends State<PreferenceRestaurantPrice> {
                                       hotelBudget: widget.hotelBudget,
                                     ))));
                       },
-                      command: 'FINISH!'))
+                      command: 'NEXT PAGE'))
             ],
           ),
         ),

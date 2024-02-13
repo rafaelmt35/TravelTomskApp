@@ -164,7 +164,6 @@ class _TypePlaceScreenState extends State<TypePlaceScreen> {
                               Text(place['name'] ?? 'Name not available'),
                               Text(
                                   place['vicinity'] ?? 'Address not available'),
-                              // Add more details you want to display here
                             ],
                           ),
                         ),

@@ -14,7 +14,7 @@ class PlaceDetailsHotel extends StatefulWidget {
 }
 
 class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
-  final apiKey = 'AIzaSyC7Fxs-HxVQ7I0cp_T3XsywyfeJFgQ_gTw';
+  final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   late List<Map<String, dynamic>> hotels;
 
   @override
@@ -98,30 +98,32 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   height: 250.0,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.placeDetails['photos'].length,
-                    itemBuilder: (context, index) {
-                      final photo = widget.placeDetails['photos'][index];
-                      final photoReference = photo['photo_reference'];
-                      final photoUrl =
-                          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.placeDetails['photos'].length,
+                      itemBuilder: (context, index) {
+                        final photo = widget.placeDetails['photos'][index];
+                        final photoReference = photo['photo_reference'];
+                        final photoUrl =
+                            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=$apiKey';
 
-                      return Container(
-                        margin: const EdgeInsets.all(8.0),
-                        padding: const EdgeInsets.all(8.0),
-                        width: MediaQuery.of(context).size.width -
-                            40, // Adjust the width as needed
+                        return Container(
+                          margin: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
+                          width: MediaQuery.of(context).size.width -
+                              40, // Adjust the width as needed
 
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                  photoUrl,
-                                ),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(10)),
-                      );
-                    },
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                    photoUrl,
+                                  ),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.circular(10)),
+                        );
+                      },
+                    ),
                   ),
                 ),
               const SizedBox(
@@ -251,7 +253,8 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                         fontWeight: FontWeight.w500),
                   ),
                 ),
-              ),const SizedBox(
+              ),
+              const SizedBox(
                 height: 15.0,
               ),
             ],

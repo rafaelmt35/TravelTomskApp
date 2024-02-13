@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:travel_app/const.dart';
 import 'dart:convert';
 
 import 'package:travel_app/placeDetails.dart';
 import 'package:travel_app/placeDetailsHotels.dart';
+import 'package:travel_app/widgets/custom_widgets.dart';
 
 class PlaceSearchPage extends StatefulWidget {
   const PlaceSearchPage({Key? key, required this.query}) : super(key: key);
@@ -17,7 +19,7 @@ class PlaceSearchPage extends StatefulWidget {
 
 class _PlaceSearchPageState extends State<PlaceSearchPage> {
   final apiKey =
-      'AIzaSyC7Fxs-HxVQ7I0cp_T3XsywyfeJFgQ_gTw'; // Replace with your Google Places API key
+      'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg'; // Replace with your Google Places API key
 
   List<String> places = [];
   List<String> listPlaceId = [];
@@ -95,6 +97,7 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: maincolor,
         title: Text(widget.query),
       ),
       body: isLoading

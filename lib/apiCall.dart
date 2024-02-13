@@ -21,7 +21,7 @@ class apiCall {
       for (var place in places) {
         final placeId = place['place_id'];
         print('Place Name: ${place['name']}');
-        print('Place ID: $placeId'); // Use this place ID in your list
+        print('Place ID: $placeId'); 
       }
       return data['results'] as List;
     } else {

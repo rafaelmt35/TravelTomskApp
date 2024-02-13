@@ -32,7 +32,7 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
   @override
   void initState() {
     print(widget.selectedplaces);
-
+    print(widget.choiceFoodRate);
     print(widget.days);
     super.initState();
   }
