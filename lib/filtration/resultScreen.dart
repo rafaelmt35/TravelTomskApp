@@ -57,88 +57,82 @@ class _ResultFiltrationState extends State<ResultFiltration> {
   List hotelslist = [];
   List hotelsid = [];
   bool isLoading = true;
+  List<Map<String, dynamic>> hotels = [];
+  List<String> placesMuseum = [];
+  List<String> placesPark = [];
+  Map<String, List<String>> placeSelectname = {};
+  Map<String, List<String>> placeSelectid = {};
+  Future<void> loadHotelData() async {
+    try {
+      final String jsonString =
+          await rootBundle.loadString('assets/hotelprice.json');
+      final dynamic jsonData = json.decode(jsonString);
 
-  void processJsonFile() async {
-    // Read JSON data from the file
-    String jsonData = await rootBundle.loadString('assets/hotelprice.json');
-
-    // Parse the JSON
-    Map<String, dynamic> data = json.decode(jsonData);
-
-    List<Map<String, dynamic>> filteredHotels = data['hotels']
-        .where((hotel) =>
-            hotel['rooms'].any((room) => room['capacity'] == widget.person))
-        .toList();
-
-    // Print the filtered hotels
-    print('Filtered Hotels:');
-    filteredHotels.forEach((hotel) {
-      print('Hotel: ${hotel['name']}');
-    });
-  }
-
-  void placeFetching() {
-    for (int i = 0; i < widget.selectedplaces.length; i++) {
-      fetchOtherPlace(widget.selectedplaces[i]);
-    }
-  }
-
-  Future<void> fetchOtherPlace(String query) async {
-    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    const String townName = 'Tomsk';
-    final apiUrl = Uri.parse(
-        '$baseUrl/textsearch/json?query=$query&location=$townName&key=$apiKey');
-    final response = await http.get(apiUrl);
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final results = data['results'] as List;
-      setState(() {
-        placesother = results.map((place) => place['name'] as String).toList();
-        listPlaceIdother =
-            results.map((place) => place['place_id'] as String).toList();
-        isLoading = false;
-      });
-    } else {
-      throw Exception('Failed to load places');
-    }
-  }
-
-  Future<void> fetchPlacesHotel() async {
-    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    const String townName = 'Tomsk';
-    final apiUrl = Uri.parse(
-        '$baseUrl/textsearch/json?query=hotel&location=$townName&key=$apiKey');
-    final response = await http.get(apiUrl);
-    if (response.statusCode == 200) {
-      final datahotel = json.decode(response.body);
-      final resultshotel = datahotel['results'] as List;
-      setState(() {
-        hotelslist =
-            resultshotel.map((place) => place['name'] as String).toList();
-        hotelsid =
-            resultshotel.map((place) => place['place_id'] as String).toList();
-        isLoading = false;
-      });
-
-      for (int i = 0; i < hotelsid.length; i++) {
-        final apiUrlDetail = Uri.parse(
-            '$baseUrl/details/json?place_id=${hotelsid[i]}&key=$apiKey');
-        final responsedetail = await http.get(apiUrlDetail);
-        if (responsedetail.statusCode == 200) {
-          final datadetail = json.decode(responsedetail.body);
-          final placeDetails = datadetail['result'];
-
-          if (placeDetails['price_level'] == foodlevel) {
-            setState(() {
-              restaurantList.add(listPlaceId[i]);
-              restaurantListName.add(placeDetails['name']);
-            });
-            print(placeDetails['name']);
-          }
-        }
+      if (jsonData is Map<String, dynamic> && jsonData.containsKey('hotels')) {
+        List<Map<String, dynamic>> allHotels =
+            (jsonData['hotels'] as List<dynamic>).cast<Map<String, dynamic>>();
+        hotels = allHotels.where((hotel) {
+          return hotel['rooms'].any((room) {
+            return room['capacity'] == widget.person &&
+                room['price'] <= widget.hotelBudget;
+          });
+        }).toList();
+      } else {
+        throw Exception('Invalid data format');
       }
-    } else {
-      throw Exception('Failed to load places');
+    } catch (e) {
+      print('Error loading hotel data: $e');
+    }
+  }
+
+  int getPriceForCapacity(Map<String, dynamic> hotel, int targetCapacity) {
+    final List<dynamic> rooms = hotel['rooms'];
+
+    for (final room in rooms) {
+      final int capacity = room['capacity'];
+      final int price = room['price'];
+
+      if (capacity == targetCapacity) {
+        return price;
+      }
+    }
+    // Return a value indicating that the capacity was not found
+    return -1;
+  }
+
+  Future<void> fetchLimitedPlaces(List<String> categories) async {
+    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
+    const String apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
+    const String townName = 'Tomsk';
+
+    // Clear previous data
+    setState(() {
+      placesMap.clear();
+    });
+
+    for (String category in categories) {
+      final apiUrl = Uri.parse(
+          '$baseUrl/textsearch/json?query=$category&location=$townName&key=$apiKey');
+      final response = await http.get(apiUrl);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final results = data['results'] as List;
+
+        // Limit the number of results to 4
+        final limitedResults = results.take(4).toList();
+
+        setState(() {
+          placesMap[category] =
+              limitedResults.map((place) => place['name'] as String).toList();
+        });
+        print('Category: $category');
+        for (String place in placesMap[category] ?? []) {
+          print(' - $place');
+        }
+      } else {
+        throw Exception('Failed to load places for $category');
+      }
     }
   }
 
@@ -188,6 +182,12 @@ class _ResultFiltrationState extends State<ResultFiltration> {
               restaurantListName.add(placeDetails['name']);
             });
             print(placeDetails['name']);
+          } else if (foodlevel == 0 && placeDetails['price_level'] == null) {
+            setState(() {
+              restaurantList.add(listPlaceId[i]);
+              restaurantListName.add(placeDetails['name']);
+            });
+            print(placeDetails['name']);
           }
         }
       }
@@ -196,7 +196,45 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     }
   }
 
-  Future<void> fetchPlaceDetails(String placeId, bool hotelorNot) async {
+  Future<Map<String, dynamic>> fetchHotelDetails(String hotelName) async {
+    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
+    const String townName = 'Tomsk';
+    final apiUrl = Uri.parse(
+        '$baseUrl/textsearch/json?query=$hotelName&location=$townName&key=$apiKey');
+
+    final response = await http.get(apiUrl);
+
+    if (response.statusCode == 200) {
+      final dataHotel = json.decode(response.body);
+      final resultsHotel = dataHotel['results'] as List;
+
+      if (resultsHotel.isNotEmpty) {
+        final hotelId = resultsHotel[0]['place_id'] as String;
+
+        final apiUrlDetail =
+            Uri.parse('$baseUrl/details/json?place_id=$hotelId&key=$apiKey');
+        final responseDetail = await http.get(apiUrlDetail);
+
+        if (responseDetail.statusCode == 200) {
+          final dataDetail = json.decode(responseDetail.body);
+          final placeDetails = dataDetail['result'];
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    PlaceDetailsHotel(placeDetails: placeDetails)),
+          );
+        }
+      }
+    } else {
+      throw Exception('Failed to load hotel details');
+    }
+
+    return {};
+  }
+
+  Future<void> fetchPlaceDetails(String placeId) async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     final apiUrl =
         Uri.parse('$baseUrl/details/json?place_id=$placeId&key=$apiKey');
@@ -226,9 +264,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => hotelorNot == true
-              ? PlaceDetailsHotel(placeDetails: placeDetails)
-              : PlaceDetails(placeDetails: placeDetails),
+          builder: (context) => PlaceDetails(placeDetails: placeDetails),
         ),
       );
     } else {
@@ -236,12 +272,12 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     }
   }
 
+  Map<String, List<String>> placesMap = {};
   @override
   void initState() {
     fetchRestaurant();
-    placeFetching();
-    fetchPlacesHotel();
-    processJsonFile();
+    loadHotelData();
+    fetchLimitedPlaces(widget.selectedplaces);
     super.initState();
   }
 
@@ -250,25 +286,25 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     String pricelevel = '';
     if (widget.choiceFoodRate == 'Choose.notexpensive') {
       setState(() {
-        pricelevel = '\$';
+        pricelevel = '';
       });
     } else if (widget.choiceFoodRate == 'Choose.moderate') {
       setState(() {
-        pricelevel = '\$\$';
+        pricelevel = '\$';
       });
     } else if (widget.choiceFoodRate == 'Choose.expensive') {
       setState(() {
-        pricelevel = '\$\$\$';
+        pricelevel = '\$\$';
       });
     } else if (widget.choiceFoodRate == 'Choose.veryexpensive') {
       setState(() {
-        pricelevel = '\$\$\$\$';
+        pricelevel = '\$\$\$';
       });
     }
 
     int selectedvalue = 0;
     TextEditingController nametripsave = TextEditingController();
-    // int len = widget.selectedplaces.length;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -316,8 +352,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                   print(
                                       'Tile tapped: ${restaurantList[index]}');
                                   // Fetch details for the selected place
-                                  fetchPlaceDetails(
-                                      restaurantList[index], false);
+                                  fetchPlaceDetails(restaurantList[index]);
                                 },
                               );
                             },
@@ -328,42 +363,104 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   height: 20,
                 ),
                 Text(
-                  ' ${widget.selectedplaces} ',
-                  style: const TextStyle(
-                      fontSize: 19.0, fontWeight: FontWeight.bold),
+                  '${widget.selectedplaces.join(', ')}',
+                  style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(7.0),
+                  margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1.0),
+                      borderRadius: BorderRadius.circular(10)),
+                  height: 180.0,
+                  child: ListView.builder(
+                    itemCount: placesMap.length * 2,
+                    itemBuilder: (context, index) {
+                      if (index.isOdd) {
+                        return Divider();
+                      }
+
+                      final categoryIndex = index ~/ 2;
+                      final category = placesMap.keys.elementAt(categoryIndex);
+                      final places = placesMap[category] ?? [];
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('$category Section',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 8),
+                          ...places.map((place) => ListTile(
+                                title: Text(place),
+                                onTap: () {
+                                  fetchPlaceDetails(place);
+                                },
+                              )),
+                        ],
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 const Text(
-                  ' Hotel Recommendation ',
+                  'Hotel Recommendation ',
                   style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
-                isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : Container(
-                        margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1.0),
-                            borderRadius: BorderRadius.circular(10)),
-                        height: 180.0,
-                        child: Scrollbar(
-                          child: ListView.builder(
-                            itemCount: hotelslist.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(hotelslist[index]),
-                                onTap: () {
-                                  // Handle tile tap
-                                  print('Tile tapped: ${hotelslist[index]}');
-                                  // Fetch details for the selected place
-                                  fetchPlaceDetails(hotelsid[index], true);
+                Text(
+                  'List of hotels price <= ${widget.hotelBudget} ₽/night for ${widget.person} person and ${widget.rooms} room/s ',
+                  style: const TextStyle(
+                      fontSize: 15.0, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1.0),
+                      borderRadius: BorderRadius.circular(10)),
+                  height: 180.0,
+                  child: FutureBuilder(
+                      future: loadHotelData(),
+                      builder: ((context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (hotels.isNotEmpty) {
+                            return Scrollbar(
+                              child: ListView.builder(
+                                itemCount: hotels.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    trailing: getPriceForCapacity(
+                                                hotels[index], widget.person) ==
+                                            -1
+                                        ? const Text('No room')
+                                        : Text(
+                                            '${getPriceForCapacity(hotels[index], widget.person)} ₽/night'),
+                                    title: Text(hotels[index]['name']),
+                                    subtitle: Text(
+                                        '${getPriceForCapacity(hotels[index], widget.person) * widget.days * widget.rooms} ₽ for ${widget.days} night and ${widget.rooms} room/s'),
+                                    onTap: () {
+                                      fetchHotelDetails(hotels[index]['name']);
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: Text('No hotels meet the criteria.'),
+                            );
+                          }
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      })),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
