@@ -140,7 +140,7 @@ class _placesToVisitState extends State<placesToVisit> {
                                         person: widget.person,
                                       ))));
                         },
-                        command: 'NEXT PAGE'))
+                        command: 'СЛЕДУЮЩИЙ'))
               ],
             ),
           ),

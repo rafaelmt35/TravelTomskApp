@@ -77,7 +77,7 @@ class Nexttripmenu extends StatelessWidget {
                             width: 20,
                             child: FloatingActionButton(
                               heroTag: null,
-                              backgroundColor:const Color(0xff588CDA),
+                              backgroundColor: const Color(0xff588CDA),
                               elevation: 0.2,
                               onPressed: () {},
                               child: const Icon(
@@ -176,7 +176,7 @@ class Smallmenubox extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               elevation: 5,
-             primary : Color(0xffEDF2F8),
+              primary: Color(0xffEDF2F8),
               onPrimary: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10), // <-- Radius
@@ -366,6 +366,52 @@ class ButtonMenuLong extends StatelessWidget {
 
 class ButtonGo extends StatelessWidget {
   const ButtonGo({
+    Key? key,
+    required this.callback,
+    required this.command,
+  }) : super(key: key);
+  final void Function(BuildContext) callback;
+  final String command;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 20, bottom: 15),
+      height: 60,
+      width: 170,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.grey,
+          backgroundColor: const Color.fromARGB(255, 142, 184, 219),
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10), // <-- Radius
+          ),
+        ),
+        onPressed: () => callback.call(context),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 130,
+              child: Text(
+                command,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontSize: 10.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ButtonGoShort extends StatelessWidget {
+  const ButtonGoShort({
     Key? key,
     required this.callback,
     required this.command,

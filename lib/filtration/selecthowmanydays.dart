@@ -91,7 +91,7 @@ class _CountDaysState extends State<CountDays> {
                                                     controllerInput.text),
                                           ))));
                             },
-                            command: 'NEXT PAGE'))
+                            command: 'СЛЕДУЮЩИЙ'))
                   ],
                 ),
               ),

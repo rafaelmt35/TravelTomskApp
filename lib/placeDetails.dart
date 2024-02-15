@@ -108,7 +108,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                 height: 15.0,
               ),
               if (widget.placeDetails['rating'] != null)
-                Text('Rating: ${widget.placeDetails['rating']}',
+                Text('Оценка: ${widget.placeDetails['rating']}',
                     style: const TextStyle(
                         fontSize: 15.0, fontWeight: FontWeight.w500)),
               const SizedBox(
@@ -167,7 +167,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                 height: 15.0,
               ),
               const Text(
-                'Opening Hours: ',
+                'Часы работы: ',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
               ),
               const SizedBox(
@@ -177,7 +177,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   ? Text(
                       '${widget.placeDetails['opening_hours']['weekday_text'].join('\n')}',
                       style: const TextStyle(fontSize: 15.0))
-                  : const Text('No Schedule', style: TextStyle(fontSize: 15.0)),
+                  : const Text('Нет расписания',
+                      style: TextStyle(fontSize: 15.0)),
               const SizedBox(
                 height: 15.0,
               ),

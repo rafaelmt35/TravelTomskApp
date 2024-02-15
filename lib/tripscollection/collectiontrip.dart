@@ -20,12 +20,23 @@ class _CollectionTripsState extends State<CollectionTrips> {
   final CollectionReference collectionRef =
       FirebaseFirestore.instance.collection('Trip');
 
+  Future<void> deleteDocument(String documentId) async {
+    try {
+      // Assuming 'collectionRef' is the reference to the Firestore collection
+      await collectionRef.doc(documentId).delete();
+      print('Document deleted successfully');
+    } catch (e) {
+      print('Error deleting document: $e');
+      // Handle error as needed
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: maincolor,
-        title: const Text('Trip Collection'),
+        title: const Text('Коллекция поездок'),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -42,31 +53,79 @@ class _CollectionTripsState extends State<CollectionTrips> {
                   Map<String, dynamic>? data =
                       documents[index].data() as Map<String, dynamic>?;
                   String? tripName = data?['name'];
-                  int? totalCost = data?['totalCost'];
+                  int? totalCost = data?['maxBudget'];
+                  int? days = data?['days'];
+                  int? person = data?['person'];
+                  int? room = data?['room'];
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: ((context) => TripPage(
-                                  choice: data?['choice'],
-                                  name: data?['name'],
-                                  totalCost: data?['totalCost'],
-                                  days: data?['days'],
-                                  rooms: data?['rooms'],
-                                  places: data?['Places']))));
+                                    hotelBudget: data?['hotelBudget'],
+                                    choice: List<String>.from(
+                                        data?['categoryChoose']),
+                                    name: data?['name'],
+                                    totalCost: data?['maxBudget'],
+                                    days: data?['days'],
+                                    rooms: data?['room'],
+                                    places: data?['Places'],
+                                    HotelList: data?['HotelList'],
+                                    restaurantChoice: data?['RestaurantChoice'],
+                                    RestaurantList: List<String>.from(
+                                        data?['RestaurantList']),
+                                    person: data?['person'],
+                                  ))));
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
                       margin: const EdgeInsets.only(bottom: 15.0),
-                      width: 120.0,
                       height: 70.0,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(width: 1.0, color: Colors.black)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [Text(tripName!), Text('$totalCost ₽')],
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                tripName!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${days.toString()} дня для ${person.toString()} человек в ${room.toString()} номере',
+                                    style: const TextStyle(fontSize: 12.0),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Общий бюджет:',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13.0)),
+                              Text('$totalCost ₽'),
+                            ],
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              deleteDocument(documents[index].id);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   );

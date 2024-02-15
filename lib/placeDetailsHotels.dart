@@ -142,7 +142,7 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                 height: 15.0,
               ),
               if (widget.placeDetails['rating'] != null)
-                Text('Rating: ${widget.placeDetails['rating']}',
+                Text('Оценка: ${widget.placeDetails['rating']}',
                     style: const TextStyle(
                         fontSize: 15.0, fontWeight: FontWeight.w500)),
               const SizedBox(
@@ -201,7 +201,7 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                 height: 15.0,
               ),
               const Text(
-                'Opening Hours: ',
+                'Часы работы: ',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
               ),
               const SizedBox(
@@ -211,13 +211,13 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                   ? Text(
                       '${widget.placeDetails['opening_hours']['weekday_text'].join('\n')}',
                       style: const TextStyle(fontSize: 15.0))
-                  : const Text('No Schedule', style: TextStyle(fontSize: 15.0)),
+                  : const Text('Нет расписания', style: TextStyle(fontSize: 15.0)),
               const SizedBox(
                 height: 15.0,
               ),
 
               const SizedBox(height: 20),
-              const Text('Rooms:',
+              const Text('Номера:',
                   style:
                       TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
               // Display rooms for the target hotel
@@ -226,11 +226,11 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 5),
-                    Text('Type: ${room['type']}'),
+                    Text('Тип: ${room['type']}'),
                     const SizedBox(height: 5),
-                    Text('Capacity: ${room['capacity']}'),
+                    Text('Bместимость: ${room['capacity']}'),
                     const SizedBox(height: 5),
-                    Text('Price: ${room['price']} ₽ /ночь'),
+                    Text('Цена: ${room['price']} ₽ /ночь'),
                     const SizedBox(height: 10),
                   ],
                 ),

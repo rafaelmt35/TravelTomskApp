@@ -1,11 +1,11 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_string_interpolations
+// ignore_for_file: use_build_context_synchronously, unnecessary_string_interpolations, avoid_print
 
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:travel_app/filtration/databaseServices.dart';
+
 import 'package:travel_app/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_app/const.dart';
@@ -40,8 +40,6 @@ class ResultFiltration extends StatefulWidget {
 }
 
 class _ResultFiltrationState extends State<ResultFiltration> {
-  var databaseservice = DatabaseServices();
-
   int foodlevel = 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -280,7 +278,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Result'),
+          title: const Text('Результат'),
           backgroundColor: maincolor,
         ),
         body: Container(
@@ -293,7 +291,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Your Budget : ${widget.maxBudget.toString()} ₽',
+                  'Ваш бюджет : ${widget.maxBudget.toString()} ₽',
                   style: const TextStyle(
                       fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
@@ -301,7 +299,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   height: 20,
                 ),
                 Text(
-                  'Restaurant  $pricelevel ',
+                  'Ресторан  $pricelevel ',
                   style: const TextStyle(
                       fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
@@ -346,47 +344,56 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                       border: Border.all(width: 1.0),
                       borderRadius: BorderRadius.circular(10)),
                   height: 250.0,
-                  child: ListView.builder(
-                    itemCount: placesMap.length * 2,
-                    itemBuilder: (context, index) {
-                      if (index.isOdd) {
-                        return const Divider();
-                      }
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemCount: placesMap.length * 2,
+                      itemBuilder: (context, index) {
+                        if (index.isOdd) {
+                          return const Divider();
+                        }
 
-                      final categoryIndex = index ~/ 2;
-                      final category = placesMap.keys.elementAt(categoryIndex);
-                      final places = placesMap[category] ?? [];
-                      final categoryId =
-                          placesMapId.keys.elementAt(categoryIndex);
-                      final placesId = placesMapId[category] ?? [];
+                        final categoryIndex = index ~/ 2;
+                        final category =
+                            placesMap.keys.elementAt(categoryIndex);
+                        final places = placesMap[category] ?? [];
+                        final placesId = placesMapId[category] ?? [];
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('$category Section',
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 8),
-                          ...places.map((place) => ListTile(
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('$category Section',
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 8),
+                            ...places.asMap().entries.map((entry) {
+                              final placeIndex = entry.key;
+                              final place = entry.value;
+                              final placeId = placesId[placeIndex];
+
+                              return ListTile(
                                 title: Text(place),
                                 onTap: () {
-                                  fetchPlaceDetails(place);
+                                  fetchPlaceDetails(placeId);
+                                  print('Selected Place: $place');
+                                  print('Place ID: $placeId');
                                 },
-                              )),
-                        ],
-                      );
-                    },
+                              );
+                            }),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 const Text(
-                  'Hotel Recommendation ',
+                  'Рекомендация отеля ',
                   style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'List of hotels price <= ${widget.hotelBudget} ₽/night for ${widget.person} person and ${widget.rooms} room/s ',
+                  'Список цен на отель <= ${widget.hotelBudget} ₽/ночь за ${widget.person} человек и ${widget.rooms} номер',
                   style: const TextStyle(
                       fontSize: 15.0, fontWeight: FontWeight.bold),
                 ),
@@ -409,12 +416,12 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                     trailing: getPriceForCapacity(
                                                 hotels[index], widget.person) ==
                                             -1
-                                        ? const Text('No room')
+                                        ? const Text('Нет номера')
                                         : Text(
-                                            '${getPriceForCapacity(hotels[index], widget.person)} ₽/night'),
+                                            '${getPriceForCapacity(hotels[index], widget.person)} ₽/ночь'),
                                     title: Text(hotels[index]['name']),
                                     subtitle: Text(
-                                        '${getPriceForCapacity(hotels[index], widget.person) * (widget.days - 1) * widget.rooms} ₽ for ${widget.days - 1} night and ${widget.rooms} room/s'),
+                                        '${getPriceForCapacity(hotels[index], widget.person) * (widget.days - 1) * widget.rooms} ₽ за ${widget.days - 1} ночь и ${widget.rooms} комнат'),
                                     onTap: () {
                                       setState(() {
                                         hotelPrice = getPriceForCapacity(
@@ -429,7 +436,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                             );
                           } else {
                             return const Center(
-                              child: Text('No hotels meet the criteria.'),
+                              child: Text(
+                                  'Ни один отель не соответствует критериям.'),
                             );
                           }
                         } else {
@@ -443,7 +451,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   height: 20,
                 ),
                 const Text(
-                  'Budget calculation',
+                  'Расчет бюджета',
                   style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
                 if (hotelName != '')
@@ -451,16 +459,16 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                       style: const TextStyle(
                           fontSize: 16.0, fontWeight: FontWeight.bold)),
                 if (hotelPrice != 0.0)
-                  Text('${hotelPrice.toString()} ₽/night',
+                  Text('${hotelPrice.toString()} ₽/ночь',
                       style: const TextStyle(fontSize: 16.0)),
                 Text(
-                    '${hotelPrice * (widget.days - 1) * widget.rooms} ₽/night for ${widget.days - 1} night and ${widget.rooms} room/s',
+                    '${hotelPrice * (widget.days - 1) * widget.rooms} ₽/ночь за ${widget.days - 1} ночь и ${widget.rooms} комнат',
                     style: const TextStyle(fontSize: 16.0)),
                 const SizedBox(
                   height: 15,
                 ),
                 const Text(
-                  'Remaining Budget : ',
+                  'Оставшийся бюджет : ',
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -469,11 +477,11 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   height: 15,
                 ),
                 const Text(
-                  'Budget cost for a day : ',
+                  'Бюджетная стоимость на день : ',
                   style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                    ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${(widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days} ₽'),
+                    ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${((widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days).toStringAsFixed(2)} ₽'),
                 const SizedBox(
                   height: 20,
                 ),
@@ -481,63 +489,70 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Center(
-                        child: ButtonGo(
+                        child: ButtonGoShort(
                             callback: (context) {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: const Text(
-                                        'Enter Name for saving trip'),
+                                        'Введите название для сохранения поездки'),
                                     content: TextFormField(
                                       controller: nametripsave,
                                       decoration: const InputDecoration(
-                                        hintText: 'Type something...',
+                                        hintText: '...',
                                       ),
                                     ),
                                     actions: [
-                                      ButtonGo(
+                                      ButtonGoShort(
                                         callback: (context) {
                                           Navigator.pop(
                                               context); // Close the dialog
                                         },
-                                        command: 'Cancel',
+                                        command: 'ОТМЕНИТЬ',
                                       ),
-                                      ButtonGo(
+                                      ButtonGoShort(
                                         callback: (context) {
-                                          // String enteredText =
-                                          //     nametripsave.text;
-                                          // Map<String, dynamic> data = {
-                                          //   'name': enteredText,
-                                          //   'totalCost': widget.maxBudget,
-                                          //   'Places': listDocRef,
-                                          //   'days': widget.days,
-                                          //   'rooms': widget.rooms,
-                                          //   // 'choice': widget.choices,
-                                          // };
-                                          // firestore
-                                          //     .collection('Trip')
-                                          //     .add(data)
-                                          //     .then((value) {
-                                          //   print('Data added successfully!');
-                                          // }).catchError((error) {
-                                          //   print('Error adding data: $error');
-                                          // });
-                                          // Navigator.pushReplacement(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: ((context) => HomePage(
-                                          //             signInWithoutGoogle: widget
-                                          //                 .signInWithoutGoogle))));
+                                          String enteredText =
+                                              nametripsave.text;
+                                          Map<String, dynamic> data = {
+                                            'name': enteredText,
+                                            'maxBudget': widget.maxBudget,
+                                            'days': widget.days,
+                                            'room': widget.rooms,
+                                            'person': widget.person,
+                                            'RestaurantChoice':
+                                                widget.choiceFoodRate,
+                                            'RestaurantList': restaurantList,
+                                            'HotelList': hotels,
+                                            'Places': placesMapId,
+                                            'categoryChoose':
+                                                widget.selectedplaces,
+                                            'hotelBudget': widget.hotelBudget
+                                          };
+                                          firestore
+                                              .collection('Trip')
+                                              .add(data)
+                                              .then((value) {
+                                            print('Data added successfully!');
+                                          }).catchError((error) {
+                                            print('Error adding data: $error');
+                                          });
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: ((context) => HomePage(
+                                                      signInWithoutGoogle: widget
+                                                          .signInWithoutGoogle))));
                                         },
-                                        command: 'Save',
+                                        command: 'СОХРАНИТЬ',
                                       ),
                                     ],
                                   );
                                 },
                               );
                             },
-                            command: 'SAVE')),
+                            command: 'СОХРАНИТЬ')),
                     Center(
                         child: ButtonGo(
                             callback: (context) {
@@ -549,7 +564,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                                 widget.signInWithoutGoogle,
                                           ))));
                             },
-                            command: 'BACK TO HOME'))
+                            command: 'ВЕРНУТЬСЯ НА ГЛАВНУЮ СТРАНИЦУ'))
                   ],
                 )
               ],

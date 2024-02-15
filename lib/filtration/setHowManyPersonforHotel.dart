@@ -145,7 +145,7 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                                                 controllerPerson.text),
                                           ))));
                             },
-                            command: 'NEXT PAGE'))
+                            command: 'СЛЕДУЮЩИЙ'))
                   ],
                 ),
               ),

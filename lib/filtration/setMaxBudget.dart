@@ -129,7 +129,7 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                                         choiceFoodRate: widget.choiceFoodRate,
                                       ))));
                         },
-                        command: 'FINISH!'))
+                        command: 'ПЕРЕЙТИ К РЕЗУЛЬТАТУ'))
               ],
             ),
           ),

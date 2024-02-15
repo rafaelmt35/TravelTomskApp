@@ -7,7 +7,6 @@ import 'dart:convert';
 
 import 'package:travel_app/placeDetails.dart';
 import 'package:travel_app/placeDetailsHotels.dart';
-import 'package:travel_app/widgets/custom_widgets.dart';
 
 class PlaceSearchPage extends StatefulWidget {
   const PlaceSearchPage({Key? key, required this.query}) : super(key: key);

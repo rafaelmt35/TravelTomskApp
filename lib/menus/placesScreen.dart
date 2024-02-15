@@ -26,47 +26,6 @@ class _TypePlaceScreenState extends State<TypePlaceScreen> {
   List placeIdList = [];
   List<String> imageUrl = [];
 
-  // void getPlacesFromAPI() async {
-  //   List listPlaceId = [];
-  //   var listplaces;
-  //   listplaces = await apiCall.fetchPlaces(widget.typePlace);
-
-  //   for (var place in listplaces) {
-  //     for (int i = 0; i < listPlaceId.length; i++) {
-  //       final apiUrl = Uri.parse(
-  //         '$baseUrl/details/json?place_id=${place['place_id']}&key=AIzaSyC7Fxs-HxVQ7I0cp_T3XsywyfeJFgQ_gTw',
-  //       );
-  //       final response = await http.get(apiUrl);
-
-  //       if (response.statusCode == 200) {
-  //         final data = json.decode(response.body);
-
-  //         final placeDetails = data['result'];
-
-  //         setState(() {
-  //           lengthList = placeDetails.length;
-  //           placeList = placeDetails;
-  //         });
-
-  //         print('Place Name: ${placeDetails['name']}');
-  //         print('Place Address: ${placeDetails['formatted_address']}');
-  //         if (placeDetails['photos'] != null) {
-  //           for (var photo in placeDetails['photos']) {
-  //             final photoReference = photo['photo_reference'];
-  //             final photoUrl =
-  //                 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=AIzaSyC7Fxs-HxVQ7I0cp_T3XsywyfeJFgQ_gTw';
-  //             print('Photo URL: $photoUrl');
-  //             imageUrl.add(photoUrl);
-  //           }
-  //         }
-  //       } else {
-  //         // Handle the API error
-  //         print('API Request Error: ${response.statusCode}');
-  //       }
-  //     }
-  //   }
-  // }
-
   List places = [];
 
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:travel_app/filtration/databaseServices.dart';
 import 'package:travel_app/filtration/selecthowmanydays.dart';
 import 'package:travel_app/const.dart';
 
@@ -25,11 +24,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<String> placeList = [];
-  var databaseservice = DatabaseServices();
+
   final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-    databaseservice.getPlaceNameList(placeList, 'Place');
     super.initState();
   }
 
@@ -121,11 +119,11 @@ class _HomePageState extends State<HomePage> {
                       child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'Any destinations today?',
+                            'Куда хотите пойти сегодня?',
                             style: TextStyle(
                                 color: Color(0xff002A69),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 23.0,
+                                fontSize: 20.0,
                                 fontFamily: 'Inter'),
                           )),
                     ),
@@ -150,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                             MaterialPageRoute(
                                 builder: (context) => const CollectionTrips()));
                       },
-                      command: 'COLLECTION',
+                      command: 'КОЛЛЕКЦИЯ',
                       iconname: Icons.collections,
                     ),
                     ButtonMenuLong(
@@ -163,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                                           widget.signInWithoutGoogle,
                                     )));
                       },
-                      command: 'BUDGET',
+                      command: 'БЮДЖЕТ',
                       iconname: Icons.monetization_on,
                     ),
                   ],
@@ -177,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       Smallmenubox(
                         iconname: Icons.hotel,
-                        menuname: 'Hotels',
+                        menuname: 'Отели',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
@@ -187,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Smallmenubox(
                         iconname: Icons.food_bank_outlined,
-                        menuname: 'Restaurant',
+                        menuname: 'Ресторан',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
@@ -197,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Smallmenubox(
                         iconname: Icons.park_outlined,
-                        menuname: 'Park',
+                        menuname: 'Парк',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
@@ -207,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Smallmenubox(
                         iconname: Icons.coffee_rounded,
-                        menuname: 'Cafe',
+                        menuname: 'Кафе',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
@@ -223,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Smallmenubox(
                       iconname: Icons.local_pharmacy,
-                      menuname: 'Pharmacy',
+                      menuname: 'Аптека',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const PlaceSearchPage(
@@ -233,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Smallmenubox(
                       iconname: Icons.museum,
-                      menuname: 'Museum',
+                      menuname: 'Музей',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const PlaceSearchPage(
@@ -243,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Smallmenubox(
                       iconname: Icons.local_mall_sharp,
-                      menuname: 'Malls',
+                      menuname: 'ТЦ',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const PlaceSearchPage(
@@ -253,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Smallmenubox(
                       iconname: Icons.school,
-                      menuname: 'University',
+                      menuname: 'Университет',
                       callback: (context) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const PlaceSearchPage(
@@ -263,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                CommandWidget('Recommendation', () {}),
+                CommandWidget('Рекомендация', () {}),
                 SizedBox(
                   height: 235.0,
                   child: Padding(
@@ -296,20 +294,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                CommandWidget('Your Next Trip', () {}),
-                const Nexttripmenu(
-                  desc:
-                      'Located on the world-famous Santa Monica Pier, Pacific Park is the family place to play!',
-                  title: 'Pacific Park',
-                  imagename:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Copenhagen_Frederiksberg_Have.jpg/800px-Copenhagen_Frederiksberg_Have.jpg',
-                ),
-                const Nexttripmenu(
-                    desc:
-                        'Located on the world-famous Santa Monica Pier, Pacific Park is the family place to play!',
-                    title: 'Pacific Park',
-                    imagename:
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Copenhagen_Frederiksberg_Have.jpg/800px-Copenhagen_Frederiksberg_Have.jpg'),
               ],
             ),
           ),

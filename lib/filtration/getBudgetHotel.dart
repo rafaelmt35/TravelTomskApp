@@ -105,7 +105,7 @@ class _setBudgetHotelState extends State<setBudgetHotel> {
                                             int.parse(controllerBudget.text),
                                       ))));
                         },
-                        command: 'Next'))
+                        command: 'СЛЕДУЮЩИЙ'))
               ],
             ),
           ),
