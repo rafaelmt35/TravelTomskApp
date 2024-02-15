@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_string_interpolations
 
 import 'dart:io';
 
@@ -62,6 +62,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
   List<String> placesPark = [];
   Map<String, List<String>> placeSelectname = {};
   Map<String, List<String>> placeSelectid = {};
+
   Future<void> loadHotelData() async {
     try {
       final String jsonString =
@@ -119,16 +120,21 @@ class _ResultFiltrationState extends State<ResultFiltration> {
         final data = json.decode(response.body);
         final results = data['results'] as List;
 
-        // Limit the number of results to 4
-        final limitedResults = results.take(4).toList();
+        final limitedResults = results.take(widget.days).toList();
 
         setState(() {
           placesMap[category] =
               limitedResults.map((place) => place['name'] as String).toList();
+          placesMapId[category] = limitedResults
+              .map((place) => place['place_id'] as String)
+              .toList();
         });
         print('Category: $category');
         for (String place in placesMap[category] ?? []) {
           print(' - $place');
+        }
+        for (String placeid in placesMapId[category] ?? []) {
+          print(' - $placeid');
         }
       } else {
         throw Exception('Failed to load places for $category');
@@ -196,44 +202,6 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     }
   }
 
-  Future<Map<String, dynamic>> fetchHotelDetails(String hotelName) async {
-    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    const String townName = 'Tomsk';
-    final apiUrl = Uri.parse(
-        '$baseUrl/textsearch/json?query=$hotelName&location=$townName&key=$apiKey');
-
-    final response = await http.get(apiUrl);
-
-    if (response.statusCode == 200) {
-      final dataHotel = json.decode(response.body);
-      final resultsHotel = dataHotel['results'] as List;
-
-      if (resultsHotel.isNotEmpty) {
-        final hotelId = resultsHotel[0]['place_id'] as String;
-
-        final apiUrlDetail =
-            Uri.parse('$baseUrl/details/json?place_id=$hotelId&key=$apiKey');
-        final responseDetail = await http.get(apiUrlDetail);
-
-        if (responseDetail.statusCode == 200) {
-          final dataDetail = json.decode(responseDetail.body);
-          final placeDetails = dataDetail['result'];
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    PlaceDetailsHotel(placeDetails: placeDetails)),
-          );
-        }
-      }
-    } else {
-      throw Exception('Failed to load hotel details');
-    }
-
-    return {};
-  }
-
   Future<void> fetchPlaceDetails(String placeId) async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     final apiUrl =
@@ -273,6 +241,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
   }
 
   Map<String, List<String>> placesMap = {};
+  Map<String, List<String>> placesMapId = {};
+
   @override
   void initState() {
     fetchRestaurant();
@@ -281,6 +251,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     super.initState();
   }
 
+  int hotelPrice = 0;
+  String hotelName = '';
   @override
   Widget build(BuildContext context) {
     String pricelevel = '';
@@ -364,7 +336,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                 ),
                 Text(
                   '${widget.selectedplaces.join(', ')}',
-                  style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 19.0, fontWeight: FontWeight.bold),
                 ),
                 Container(
                   padding: const EdgeInsets.all(7.0),
@@ -372,25 +345,28 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                   decoration: BoxDecoration(
                       border: Border.all(width: 1.0),
                       borderRadius: BorderRadius.circular(10)),
-                  height: 180.0,
+                  height: 250.0,
                   child: ListView.builder(
                     itemCount: placesMap.length * 2,
                     itemBuilder: (context, index) {
                       if (index.isOdd) {
-                        return Divider();
+                        return const Divider();
                       }
 
                       final categoryIndex = index ~/ 2;
                       final category = placesMap.keys.elementAt(categoryIndex);
                       final places = placesMap[category] ?? [];
+                      final categoryId =
+                          placesMapId.keys.elementAt(categoryIndex);
+                      final placesId = placesMapId[category] ?? [];
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('$category Section',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           ...places.map((place) => ListTile(
                                 title: Text(place),
                                 onTap: () {
@@ -438,26 +414,66 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                             '${getPriceForCapacity(hotels[index], widget.person)} ₽/night'),
                                     title: Text(hotels[index]['name']),
                                     subtitle: Text(
-                                        '${getPriceForCapacity(hotels[index], widget.person) * widget.days * widget.rooms} ₽ for ${widget.days} night and ${widget.rooms} room/s'),
+                                        '${getPriceForCapacity(hotels[index], widget.person) * (widget.days - 1) * widget.rooms} ₽ for ${widget.days - 1} night and ${widget.rooms} room/s'),
                                     onTap: () {
-                                      fetchHotelDetails(hotels[index]['name']);
+                                      setState(() {
+                                        hotelPrice = getPriceForCapacity(
+                                            hotels[index], widget.person);
+                                        hotelName = hotels[index]['name'];
+                                      });
+                                      print(hotelPrice);
                                     },
                                   );
                                 },
                               ),
                             );
                           } else {
-                            return Center(
+                            return const Center(
                               child: Text('No hotels meet the criteria.'),
                             );
                           }
                         } else {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
                       })),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Budget calculation',
+                  style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
+                ),
+                if (hotelName != '')
+                  Text(hotelName,
+                      style: const TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold)),
+                if (hotelPrice != 0.0)
+                  Text('${hotelPrice.toString()} ₽/night',
+                      style: const TextStyle(fontSize: 16.0)),
+                Text(
+                    '${hotelPrice * (widget.days - 1) * widget.rooms} ₽/night for ${widget.days - 1} night and ${widget.rooms} room/s',
+                    style: const TextStyle(fontSize: 16.0)),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'Remaining Budget : ',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                    '${widget.maxBudget} ₽ - ${hotelPrice * (widget.days - 1) * widget.rooms} ₽ = ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽'),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'Budget cost for a day : ',
+                  style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                    ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${(widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days} ₽'),
                 const SizedBox(
                   height: 20,
                 ),
