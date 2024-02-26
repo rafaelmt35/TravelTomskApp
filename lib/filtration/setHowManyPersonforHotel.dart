@@ -51,7 +51,7 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                       height: 10,
                     ),
                     const Text(
-                      'Сколько комнат/номер вам нужны?',
+                      'Сколько комнат/номеров вам нужны?',
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),

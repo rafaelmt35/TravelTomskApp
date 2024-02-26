@@ -217,7 +217,7 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
               ),
 
               const SizedBox(height: 20),
-              const Text('Номера:',
+              const Text('Комнат / номеров:',
                   style:
                       TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
               // Display rooms for the target hotel
