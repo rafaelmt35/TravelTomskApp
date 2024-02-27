@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class Nexttripmenu extends StatelessWidget {
@@ -175,9 +177,9 @@ class Smallmenubox extends StatelessWidget {
           width: 72,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.grey,
+              backgroundColor: const Color(0xffEDF2F8),
               elevation: 5,
-              primary: Color(0xffEDF2F8),
-              onPrimary: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10), // <-- Radius
               ),
@@ -230,7 +232,7 @@ Widget CommandWidget(String command, Function callback) {
         width: 23,
         child: FloatingActionButton(
           heroTag: null,
-          backgroundColor: Color(0xff588CDA),
+          backgroundColor: const Color(0xff588CDA),
           elevation: 0.2,
           onPressed: callback(),
           child: const Icon(

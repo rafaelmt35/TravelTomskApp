@@ -20,9 +20,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailcontroller = new TextEditingController();
-  TextEditingController passwordcontroller = new TextEditingController();
-  TextEditingController usernamecontroller = new TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
+  TextEditingController usernamecontroller = TextEditingController();
   bool visibleAlert = false;
 
   @override
@@ -45,7 +45,11 @@ class _SignUpPageState extends State<SignUpPage> {
       }
       // navigatorKey.currentState!.popUntil((route) => route.isFirst);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage(signInWithoutGoogle: true,)));
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage(
+                    signInWithoutGoogle: true,
+                  )));
     }
 
     return MaterialApp(

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_string_interpolations, avoid_print
+// ignore_for_file: use_build_context_synchronously, unnecessary_string_interpolations, avoid_print, duplicate_import, unused_import, unused_local_variable, file_names
 
 import 'dart:io';
 

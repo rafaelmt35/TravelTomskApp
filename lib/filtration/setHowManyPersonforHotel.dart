@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/placesToVisit.dart';
 import 'package:travel_app/const.dart';

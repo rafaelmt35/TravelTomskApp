@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, unused_import
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/placesToVisit.dart';
 import 'package:travel_app/filtration/setHowManyPersonforHotel.dart';
