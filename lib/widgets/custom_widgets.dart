@@ -378,7 +378,7 @@ class ButtonGo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, bottom: 15),
+      margin: const EdgeInsets.only(left: 10, bottom: 15),
       height: 60,
       width: 170,
       child: ElevatedButton(
@@ -391,21 +391,11 @@ class ButtonGo extends StatelessWidget {
           ),
         ),
         onPressed: () => callback.call(context),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 130,
-              child: Text(
-                command,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 10.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ],
+        child: Text(
+          command,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),
         ),
       ),
     );
