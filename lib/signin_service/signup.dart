@@ -90,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 10,
                       ),
                       textFieldandCommand(
                           emailcontroller,
@@ -99,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       textFieldandCommand(
                           usernamecontroller, 'Имя', 'Введите имя'),
                       const SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
                       const Text(
                         'Пароль',
