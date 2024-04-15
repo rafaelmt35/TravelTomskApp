@@ -94,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       const Center(
                         child: Text(
-                          'Sign In',
+                          'Войти',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
@@ -103,19 +103,19 @@ class _SignInPageState extends State<SignInPage> {
                         height: 85,
                       ),
                       const Text(
-                        'Email Address',
+                        'Адрес электронной почты',
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(
                         height: 15,
                       ),
                       customTextFieldLogIn(
-                          emailcontroller, 'Enter your email address'),
+                          emailcontroller, 'Введите адрес электронной почты'),
                       const SizedBox(
                         height: 25,
                       ),
                       const Text(
-                        'Password',
+                        'Пароль',
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(
@@ -123,7 +123,7 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       PasswordTextField(
                           passwordcontroller: passwordcontroller,
-                          command: 'Enter your password'),
+                          command: 'Введите пароль'),
                       const SizedBox(
                         height: 65,
                       ),
@@ -143,15 +143,15 @@ class _SignInPageState extends State<SignInPage> {
                               onPressed: () async {
                                 await SignInEmailPass();
                               },
-                              child: Center(
+                              child: const Center(
                                 child: Text(
-                                  'Log In',
+                                  'Войти',
                                   style: TextStyle(fontSize: 18),
                                 ),
                               )),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15.0,
                       ),
                       Row(
@@ -159,16 +159,17 @@ class _SignInPageState extends State<SignInPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Don't have Account? ",
+                            "Нет аккаунта? ",
                           ),
                           ClickackbleText(
                             color: Colors.black,
-                            command: 'Sign up',
+                            command: 'Зарегистрироваться',
                             callback: (context) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => SignUpPage())));
+                                      builder: ((context) =>
+                                          const SignUpPage())));
                             },
                           )
                         ],

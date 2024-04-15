@@ -84,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       const Center(
                         child: Text(
-                          'Sign Up',
+                          'Регистрация',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 30),
                         ),
@@ -92,15 +92,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       const SizedBox(
                         height: 30,
                       ),
-                      textFieldandCommand(emailcontroller, 'Email Address',
-                          'Enter your email address'),
-                      textFieldandCommand(usernamecontroller, 'Username',
-                          'Enter your username'),
+                      textFieldandCommand(
+                          emailcontroller,
+                          'Адрес электронной почты',
+                          'Введите адрес электронной почты'),
+                      textFieldandCommand(
+                          usernamecontroller, 'Имя', 'Введите имя'),
                       const SizedBox(
                         height: 15,
                       ),
                       const Text(
-                        'Password',
+                        'Пароль',
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(
@@ -108,14 +110,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       PasswordTextField(
                           passwordcontroller: passwordcontroller,
-                          command: 'Password'),
+                          command: 'Пароль'),
                       const SizedBox(
                         height: 25,
                       ),
                       Center(
                         child: SizedBox(
                           height: 50,
-                          width: 180,
+                          width: 210,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
@@ -135,9 +137,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 'username': usernamecontroller.text
                               });
                             },
-                            child: Center(
+                            child: const Center(
                               child: Text(
-                                'Sign Up',
+                                'Зарегистрировать',
                                 style: TextStyle(fontSize: 18),
                               ),
                             ),
@@ -160,7 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           ClickackbleText(
                             color: Colors.black,
-                            command: 'Sign up with Google',
+                            command: 'Зарегистрируйтесь через Google',
                             callback: (context) {
                               final provider =
                                   Provider.of<GoogleSignInProvider>(context,
@@ -178,16 +180,17 @@ class _SignUpPageState extends State<SignUpPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Have Account? ",
+                            "Есть аккаунт? ",
                           ),
                           ClickackbleText(
                             color: Colors.black,
-                            command: 'Sign in',
+                            command: 'Войти',
                             callback: (context) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: ((context) => SignInPage())));
+                                      builder: ((context) =>
+                                          const SignInPage())));
                             },
                           )
                         ],
