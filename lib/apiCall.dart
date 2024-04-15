@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class apiCall {
@@ -8,7 +7,7 @@ class apiCall {
   apiCall({required this.query});
 
   static Future<List> fetchPlaces(String query) async {
-    String apiKey = dotenv.env['API_KEY']!;
+    const apiKey = 'AIzaSyC7Fxs-HxVQ7I0cp_T3XsywyfeJFgQ_gTw';
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     const String townName = 'Tomsk';
     final apiUrl = Uri.parse(
