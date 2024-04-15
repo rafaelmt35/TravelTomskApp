@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:provider/provider.dart';
 
@@ -24,10 +25,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   List<String> placeList = [];
+  final User? user = FirebaseAuth.instance.currentUser;
 
-  final user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
+    print(user!.uid);
     super.initState();
   }
 
@@ -38,19 +40,19 @@ class _HomePageState extends State<HomePage> {
         firestore.collection('Place').limit(8);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(120),
-          child: AppBar(
-            elevation: 8,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25))),
-            toolbarHeight: 18,
-            flexibleSpace: SafeArea(
-              child: Container(
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(120),
+            child: AppBar(
+              elevation: 8,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25))),
+              toolbarHeight: 18,
+              flexibleSpace: Container(
                 decoration: BoxDecoration(
                     color: maincolor,
                     borderRadius: const BorderRadius.only(
@@ -97,18 +99,6 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.black,
                                 ),
                               ),
-                              FloatingActionButton(
-                                heroTag: null,
-                                elevation: 0.0,
-                                onPressed: () {},
-                                backgroundColor: Colors.transparent,
-                                splashColor: Colors.grey.withOpacity(0.4),
-                                mini: true,
-                                child: const Icon(
-                                  Icons.person,
-                                  color: Colors.black,
-                                ),
-                              ),
                             ],
                           )
                         ],
@@ -132,169 +122,171 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: [
-                    ButtonMenuLong(
-                      callback: (context) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CollectionTrips()));
-                      },
-                      command: 'КОЛЛЕКЦИЯ',
-                      iconname: Icons.collections,
-                    ),
-                    ButtonMenuLong(
-                      callback: (context) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CountDays(
-                                      signInWithoutGoogle:
-                                          widget.signInWithoutGoogle,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      ButtonMenuLong(
+                        callback: (context) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CollectionTrips(
+                                        uid: user!.uid,
+                                      )));
+                        },
+                        command: 'КОЛЛЕКЦИЯ',
+                        iconname: Icons.collections,
+                      ),
+                      ButtonMenuLong(
+                        callback: (context) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CountDays(
+                                        signInWithoutGoogle:
+                                            widget.signInWithoutGoogle,
+                                      )));
+                        },
+                        command: 'БЮДЖЕТ',
+                        iconname: Icons.monetization_on,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Smallmenubox(
+                          iconname: Icons.hotel,
+                          menuname: 'Отели',
+                          callback: (context) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const PlaceSearchPage(
+                                      query: 'hotel',
                                     )));
-                      },
-                      command: 'БЮДЖЕТ',
-                      iconname: Icons.monetization_on,
+                          },
+                        ),
+                        Smallmenubox(
+                          iconname: Icons.food_bank_outlined,
+                          menuname: 'Ресторан',
+                          callback: (context) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const PlaceSearchPage(
+                                      query: 'restaurant',
+                                    )));
+                          },
+                        ),
+                        Smallmenubox(
+                          iconname: Icons.park_outlined,
+                          menuname: 'Парк',
+                          callback: (context) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const PlaceSearchPage(
+                                      query: 'park',
+                                    )));
+                          },
+                        ),
+                        Smallmenubox(
+                          iconname: Icons.coffee_rounded,
+                          menuname: 'Кафе',
+                          callback: (context) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const PlaceSearchPage(
+                                      query: 'cafe',
+                                    )));
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                  child: Row(
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Smallmenubox(
-                        iconname: Icons.hotel,
-                        menuname: 'Отели',
+                        iconname: Icons.local_pharmacy,
+                        menuname: 'Аптека',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'hotel',
+                                    query: 'pharmacy',
                                   )));
                         },
                       ),
                       Smallmenubox(
-                        iconname: Icons.food_bank_outlined,
-                        menuname: 'Ресторан',
+                        iconname: Icons.museum,
+                        menuname: 'Музей',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'restaurant',
+                                    query: 'museums',
                                   )));
                         },
                       ),
                       Smallmenubox(
-                        iconname: Icons.park_outlined,
-                        menuname: 'Парк',
+                        iconname: Icons.local_mall_sharp,
+                        menuname: 'ТЦ',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'park',
+                                    query: 'malls',
                                   )));
                         },
                       ),
                       Smallmenubox(
-                        iconname: Icons.coffee_rounded,
-                        menuname: 'Кафе',
+                        iconname: Icons.school,
+                        menuname: 'Университет',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'cafe',
+                                    query: 'university',
                                   )));
                         },
                       ),
                     ],
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Smallmenubox(
-                      iconname: Icons.local_pharmacy,
-                      menuname: 'Аптека',
-                      callback: (context) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const PlaceSearchPage(
-                                  query: 'pharmacy',
-                                )));
-                      },
-                    ),
-                    Smallmenubox(
-                      iconname: Icons.museum,
-                      menuname: 'Музей',
-                      callback: (context) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const PlaceSearchPage(
-                                  query: 'museums',
-                                )));
-                      },
-                    ),
-                    Smallmenubox(
-                      iconname: Icons.local_mall_sharp,
-                      menuname: 'ТЦ',
-                      callback: (context) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const PlaceSearchPage(
-                                  query: 'malls',
-                                )));
-                      },
-                    ),
-                    Smallmenubox(
-                      iconname: Icons.school,
-                      menuname: 'Университет',
-                      callback: (context) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const PlaceSearchPage(
-                                  query: 'university',
-                                )));
-                      },
-                    ),
-                  ],
-                ),
-                CommandWidget('Рекомендация', () {}),
-                SizedBox(
-                  height: 235.0,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: ListView(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      physics: const ClampingScrollPhysics(),
-                      children: [
-                        StreamBuilder<QuerySnapshot>(
-                          stream: placeCollectionReference.snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                  children: snapshot.data!.docs
-                                      .map((e) => Citycardmenu(
-                                            imagename:
-                                                (e.data() as dynamic)['image'],
-                                            cityname:
-                                                (e.data() as dynamic)['name'],
-                                            callback: (context) {},
-                                          ))
-                                      .toList());
-                            } else {
-                              return const Text('Loading');
-                            }
-                          },
-                        )
-                      ],
+                  CommandWidget('Рекомендация', () {}),
+                  SizedBox(
+                    height: 235.0,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: ListView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const ClampingScrollPhysics(),
+                        children: [
+                          StreamBuilder<QuerySnapshot>(
+                            stream: placeCollectionReference.snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Row(
+                                    children: snapshot.data!.docs
+                                        .map((e) => Citycardmenu(
+                                              imagename: (e.data()
+                                                  as dynamic)['image'],
+                                              cityname:
+                                                  (e.data() as dynamic)['name'],
+                                              callback: (context) {},
+                                            ))
+                                        .toList());
+                              } else {
+                                return const Text('Loading');
+                              }
+                            },
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

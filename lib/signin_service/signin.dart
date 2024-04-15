@@ -140,8 +140,8 @@ class _SignInPageState extends State<SignInPage> {
                                       BorderRadius.circular(10), // <-- Radius
                                 ),
                               ),
-                              onPressed: () {
-                                SignInEmailPass();
+                              onPressed: () async {
+                                await SignInEmailPass();
                               },
                               child: Center(
                                 child: Text(

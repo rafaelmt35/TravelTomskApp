@@ -125,8 +125,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     BorderRadius.circular(10), // <-- Radius
                               ),
                             ),
-                            onPressed: () {
-                              SignUp();
+                            onPressed: () async {
+                              await SignUp();
                               FirebaseFirestore.instance
                                   .collection('Account')
                                   .add({

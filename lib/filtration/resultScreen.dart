@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -42,7 +43,7 @@ class ResultFiltration extends StatefulWidget {
 class _ResultFiltrationState extends State<ResultFiltration> {
   int foodlevel = 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  final User? user = FirebaseAuth.instance.currentUser;
   final apiKey =
       'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg'; // Replace with your Google Places API key
 
@@ -528,7 +529,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                             'Places': placesMapId,
                                             'categoryChoose':
                                                 widget.selectedplaces,
-                                            'hotelBudget': widget.hotelBudget
+                                            'hotelBudget': widget.hotelBudget,
+                                            'uid': user!.uid
                                           };
                                           firestore
                                               .collection('Trip')

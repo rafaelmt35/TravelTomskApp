@@ -15,6 +15,7 @@ import 'dart:io';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -31,9 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: HomePage(
-          signInWithoutGoogle: false,
-        ),
+        home: InitialPage(),
       ),
     );
   }
@@ -48,11 +47,7 @@ class InitialPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
+          if (snapshot.hasError) {
             return const Center(
               child: Text('Something went wrong'),
             );

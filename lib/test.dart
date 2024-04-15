@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_app/const.dart';
 import 'dart:convert';
@@ -17,9 +18,8 @@ class PlaceSearchPage extends StatefulWidget {
 }
 
 class _PlaceSearchPageState extends State<PlaceSearchPage> {
-  final apiKey =
-      'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg'; // Replace with your Google Places API key
-
+  final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
+  // String apiKey = dotenv.env['API_KEY']!;
   List<String> places = [];
   List<String> listPlaceId = [];
   List restaurantList = [];
@@ -44,6 +44,7 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
         places = results.map((place) => place['name'] as String).toList();
         listPlaceId =
             results.map((place) => place['place_id'] as String).toList();
+        print(listPlaceId);
         isLoading = false;
       });
     } else {

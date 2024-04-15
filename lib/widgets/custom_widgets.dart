@@ -187,13 +187,12 @@ class Smallmenubox extends StatelessWidget {
             onPressed: () => callback.call(context),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Center(
-                  child: Icon(
-                    iconname,
-                    size: 30.0,
-                    color: Colors.black,
-                  ),
+                Icon(
+                  iconname,
+                  size: 30.0,
+                  color: Colors.black,
                 ),
               ],
             ),
