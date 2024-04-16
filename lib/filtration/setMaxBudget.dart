@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/resultScreen.dart';
 

@@ -1,12 +1,8 @@
-import 'dart:convert';
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 import 'package:travel_app/apiCall.dart';
 import 'package:travel_app/const.dart';
-import 'package:travel_app/placeDetails.dart';
-
-import 'package:travel_app/widgets/custom_widgets.dart';
-import 'package:http/http.dart' as http;
 
 class TypePlaceScreen extends StatefulWidget {
   const TypePlaceScreen({Key? key, required this.typePlace}) : super(key: key);

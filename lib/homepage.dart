@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,8 @@ import 'package:travel_app/tripscollection/collectiontrip.dart';
 import 'widgets/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, required this.signInWithoutGoogle}) : super(key: key);
+  const HomePage({Key? key, required this.signInWithoutGoogle})
+      : super(key: key);
   final bool signInWithoutGoogle;
   @override
   State<HomePage> createState() => _HomePageState();

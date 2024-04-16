@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, file_names
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/preferencePriceRestaurant.dart';
 
@@ -131,7 +133,7 @@ class _placesToVisitState extends State<placesToVisit> {
                               MaterialPageRoute(
                                   builder: ((context) =>
                                       PreferenceRestaurantPrice(
-                                        hotelBudget : widget.hotelBudget,
+                                        hotelBudget: widget.hotelBudget,
                                         selectedplaces: selectedplaces,
                                         signInWithoutGoogle:
                                             widget.signInWithoutGoogle,

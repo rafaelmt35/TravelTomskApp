@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: InitialPage(),
+        home: const InitialPage(),
       ),
     );
   }
@@ -52,7 +52,7 @@ class InitialPage extends StatelessWidget {
               child: Text('Something went wrong'),
             );
           } else if (snapshot.hasData) {
-            return HomePage(
+            return const HomePage(
               signInWithoutGoogle: true,
             );
           } else {

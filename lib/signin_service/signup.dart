@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, non_constant_identifier_names, avoid_print, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,6 @@ import 'package:travel_app/signin_service/signin.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../main.dart';
 import 'googlesignin.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -47,8 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => HomePage(
-                    signInWithoutGoogle: true,
+              builder: (context) => const HomePage(
+                    signInWithoutGoogle: false,
                   )));
     }
 

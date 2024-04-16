@@ -1,5 +1,7 @@
-import 'dart:convert';
+// ignore_for_file: avoid_print, file_names
 
+import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,6 +18,11 @@ class PlaceDetailsHotel extends StatefulWidget {
 class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
   final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   late List<Map<String, dynamic>> hotels;
+  late GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   @override
   void initState() {
@@ -211,7 +218,8 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                   ? Text(
                       '${widget.placeDetails['opening_hours']['weekday_text'].join('\n')}',
                       style: const TextStyle(fontSize: 15.0))
-                  : const Text('Нет расписания', style: TextStyle(fontSize: 15.0)),
+                  : const Text('Нет расписания',
+                      style: TextStyle(fontSize: 15.0)),
               const SizedBox(
                 height: 15.0,
               ),
@@ -257,10 +265,39 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
               const SizedBox(
                 height: 15.0,
               ),
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
+                height: 350,
+                child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                        widget.placeDetails['geometry']['location']['lat'],
+                        widget.placeDetails['geometry']['location']['lng']),
+                    zoom: 15.0,
+                  ),
+                  markers: _createMarkers(),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Set<Marker> _createMarkers() {
+    return {
+      Marker(
+        markerId: const MarkerId('place'),
+        position: LatLng(widget.placeDetails['geometry']['location']['lat'],
+            widget.placeDetails['geometry']['location']['lng']),
+        infoWindow: InfoWindow(
+          title: widget.placeDetails['name'] ?? '',
+        ),
+      ),
+    };
   }
 }

@@ -1,7 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_app/const.dart';
 import 'dart:convert';
@@ -78,6 +77,8 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
           'formatted_phone_number: ${placeDetails['formatted_phone_number']}');
       print('website: ${placeDetails['website']}');
       print('price_level: ${placeDetails['price_level']}');
+      print('LAT : ${placeDetails['geometry']['location']['lat']}');
+      print('LAT : ${placeDetails['geometry']['location']['lng']}');
 
       // Navigate to details page with placeDetails
       Navigator.push(

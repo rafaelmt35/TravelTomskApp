@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PlaceDetails extends StatefulWidget {
@@ -12,6 +15,16 @@ class PlaceDetails extends StatefulWidget {
 
 class _PlaceDetailsState extends State<PlaceDetails> {
   final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
+  late GoogleMapController mapController;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,10 +214,42 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
+                height: 350,
+                child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                        widget.placeDetails['geometry']['location']['lat'],
+                        widget.placeDetails['geometry']['location']['lng']),
+                    zoom: 15.0,
+                  ),
+                  markers: _createMarkers(),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Set<Marker> _createMarkers() {
+    return {
+      Marker(
+        markerId: const MarkerId('place'),
+        position: LatLng(widget.placeDetails['geometry']['location']['lat'],
+            widget.placeDetails['geometry']['location']['lng']),
+        infoWindow: InfoWindow(
+          title: widget.placeDetails['name'] ?? '',
+        ),
+      ),
+    };
   }
 }

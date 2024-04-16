@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, depend_on_referenced_packages, unnecessary_import, non_constant_identifier_names, use_build_context_synchronously, duplicate_ignore, avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -54,8 +56,8 @@ class _SignInPageState extends State<SignInPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => HomePage(
-                    signInWithoutGoogle: true,
+              builder: (context) => const HomePage(
+                    signInWithoutGoogle: false,
                   )));
     }
 

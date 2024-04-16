@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, file_names
 
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/placesToVisit.dart';
