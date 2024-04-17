@@ -1,6 +1,6 @@
 # Travel App Go-Travel
 
-Anndroid application for finding recommended places in Tomsk, Russia.
+Android application for finding recommended places in Tomsk, Russia.
 
 ## Features:
 1. User can see the places in Tomsk based on type place (Park, Museum, Mall, e.t.c )
