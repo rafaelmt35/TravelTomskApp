@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/tripscollection/tripPage.dart';
 
+import '../const.dart';
+
 class CollectionTrips extends StatefulWidget {
   const CollectionTrips({Key? key, required this.uid}) : super(key: key);
 
@@ -38,6 +40,7 @@ class _CollectionTripsState extends State<CollectionTrips> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: maincolor,
         title: const Text('Коллекция поездок'),
       ),
       body: Container(
@@ -98,12 +101,12 @@ class _CollectionTripsState extends State<CollectionTrips> {
                                 tripName!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14.0,
+                                  fontSize: 12.0,
                                 ),
                               ),
                               Text(
                                 '$days дня для $person человек в $room номере',
-                                style: const TextStyle(fontSize: 12.0),
+                                style: const TextStyle(fontSize: 10.0),
                               ),
                             ],
                           ),
@@ -114,7 +117,7 @@ class _CollectionTripsState extends State<CollectionTrips> {
                                 'Общий бюджет:',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 13.0,
+                                  fontSize: 11.0,
                                 ),
                               ),
                               Text('$totalCost ₽'),
@@ -123,6 +126,7 @@ class _CollectionTripsState extends State<CollectionTrips> {
                           Visibility(
                             visible: user!.uid != uid ? false : true,
                             child: IconButton(
+                              padding: const EdgeInsets.all(0.0),
                               icon: const Icon(Icons.delete),
                               onPressed: () {
                                 deleteDocument(documents[index].id);

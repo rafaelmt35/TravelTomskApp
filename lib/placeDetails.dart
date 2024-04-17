@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:travel_app/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,7 +15,7 @@ class PlaceDetails extends StatefulWidget {
 }
 
 class _PlaceDetailsState extends State<PlaceDetails> {
-  final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
+  // final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   late GoogleMapController mapController;
 
   @override
@@ -85,13 +86,13 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                         final photo = widget.placeDetails['photos'][index];
                         final photoReference = photo['photo_reference'];
                         final photoUrl =
-                            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+                            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
 
                         return Container(
                           margin: const EdgeInsets.all(8.0),
                           padding: const EdgeInsets.all(8.0),
                           width: MediaQuery.of(context).size.width -
-                              40, // Adjust the width as needed
+                              70, // Adjust the width as needed
 
                           decoration: BoxDecoration(
                               image: DecorationImage(

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:travel_app/homepage.dart';
 import 'package:http/http.dart' as http;
@@ -44,8 +45,6 @@ class _ResultFiltrationState extends State<ResultFiltration> {
   int foodlevel = 0;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final User? user = FirebaseAuth.instance.currentUser;
-  final apiKey =
-      'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg'; // Replace with your Google Places API key
 
   List<String> places = [];
   List<String> listPlaceId = [];
@@ -162,7 +161,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     const String townName = 'Tomsk';
     final apiUrl = Uri.parse(
-        '$baseUrl/textsearch/json?query=restaurant&location=$townName&key=$apiKey');
+        '$baseUrl/textsearch/json?query=restaurant&location=$townName&key=${dotenv.env["API_KEY"]}');
     final response = await http.get(apiUrl);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -176,7 +175,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
 
       for (int i = 0; i < listPlaceId.length; i++) {
         final apiUrlDetail = Uri.parse(
-            '$baseUrl/details/json?place_id=${listPlaceId[i]}&key=$apiKey');
+            '$baseUrl/details/json?place_id=${listPlaceId[i]}&key=${dotenv.env["API_KEY"]}');
         final responsedetail = await http.get(apiUrlDetail);
         if (responsedetail.statusCode == 200) {
           final datadetail = json.decode(responsedetail.body);
@@ -203,8 +202,8 @@ class _ResultFiltrationState extends State<ResultFiltration> {
 
   Future<void> fetchPlaceDetails(String placeId) async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    final apiUrl =
-        Uri.parse('$baseUrl/details/json?place_id=$placeId&key=$apiKey');
+    final apiUrl = Uri.parse(
+        '$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
     final response = await http.get(apiUrl);
 
     if (response.statusCode == 200) {
@@ -218,7 +217,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
         for (var photo in placeDetails['photos']) {
           final photoReference = photo['photo_reference'];
           final photoUrl =
-              'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+              'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
           print('Photo URL: $photoUrl');
         }
       }
@@ -558,13 +557,15 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                     Center(
                         child: ButtonGo(
                             callback: (context) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) => HomePage(
-                                            signInWithoutGoogle:
-                                                widget.signInWithoutGoogle,
-                                          ))));
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, "/homepage", (_) => false);
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: ((context) => HomePage(
+                              //               signInWithoutGoogle:
+                              //                   widget.signInWithoutGoogle,
+                              //             ))));
                             },
                             command: 'ВЕРНУТЬСЯ НА ГЛАВНУЮ СТРАНИЦУ'))
                   ],

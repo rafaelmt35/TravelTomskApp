@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     print(user!.uid);
+
     super.initState();
   }
 

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_app/const.dart';
 import 'dart:convert';
@@ -17,7 +18,6 @@ class PlaceSearchPage extends StatefulWidget {
 }
 
 class _PlaceSearchPageState extends State<PlaceSearchPage> {
-  final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   // String apiKey = dotenv.env['API_KEY']!;
   List<String> places = [];
   List<String> listPlaceId = [];
@@ -34,7 +34,7 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     const String townName = 'Tomsk';
     final apiUrl = Uri.parse(
-        '$baseUrl/textsearch/json?query=${widget.query}&location=$townName&key=$apiKey');
+        '$baseUrl/textsearch/json?query=${widget.query}&location=$townName&key=${dotenv.env["API_KEY"]}');
     final response = await http.get(apiUrl);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -53,8 +53,8 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
 
   Future<void> fetchPlaceDetails(String placeId) async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    final apiUrl =
-        Uri.parse('$baseUrl/details/json?place_id=$placeId&key=$apiKey');
+    final apiUrl = Uri.parse(
+        '$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
     final response = await http.get(apiUrl);
 
     if (response.statusCode == 200) {
@@ -68,7 +68,7 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
         for (var photo in placeDetails['photos']) {
           final photoReference = photo['photo_reference'];
           final photoUrl =
-              'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+              'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
           print('Photo URL: $photoUrl');
         }
       }

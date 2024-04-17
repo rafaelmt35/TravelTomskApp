@@ -15,7 +15,7 @@ import 'dart:io';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -33,6 +33,11 @@ class MyApp extends StatelessWidget {
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         home: const InitialPage(),
+        routes: {
+          "/homepage": (_) => const HomePage(
+                signInWithoutGoogle: false,
+              ),
+        },
       ),
     );
   }

@@ -118,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       Center(
                         child: SizedBox(
                           height: 50,
-                          width: 210,
+                          width: 220,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,

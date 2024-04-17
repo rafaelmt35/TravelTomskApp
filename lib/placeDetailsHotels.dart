@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, file_names
 
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/const.dart';
@@ -16,7 +17,7 @@ class PlaceDetailsHotel extends StatefulWidget {
 }
 
 class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
-  final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
+  // final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   late List<Map<String, dynamic>> hotels;
   late GoogleMapController mapController;
 
@@ -113,13 +114,13 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                         final photo = widget.placeDetails['photos'][index];
                         final photoReference = photo['photo_reference'];
                         final photoUrl =
-                            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=$apiKey';
+                            'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
 
                         return Container(
                           margin: const EdgeInsets.all(8.0),
                           padding: const EdgeInsets.all(8.0),
                           width: MediaQuery.of(context).size.width -
-                              40, // Adjust the width as needed
+                              70, // Adjust the width as needed
 
                           decoration: BoxDecoration(
                               image: DecorationImage(
