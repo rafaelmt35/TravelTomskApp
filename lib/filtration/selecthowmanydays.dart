@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:travel_app/filtration/getBudgetHotel.dart';
 
 import 'package:travel_app/const.dart';
@@ -90,21 +89,19 @@ class _CountDaysState extends State<CountDays> {
                                 ? setState(() {
                                     isVisible = true;
                                   })
-                                : 
-                                setState(() {
+                                : setState(() {
                                     isVisible = false;
                                   });
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) => setBudgetHotel(
-                                              signInWithoutGoogle:
-                                                  widget.signInWithoutGoogle,
-                                              days: controllerInput.text == ''
-                                                  ? 0
-                                                  : int.parse(
-                                                      controllerInput.text),
-                                            ))));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => setBudgetHotel(
+                                          signInWithoutGoogle:
+                                              widget.signInWithoutGoogle,
+                                          days: controllerInput.text == ''
+                                              ? 0
+                                              : int.parse(controllerInput.text),
+                                        ))));
                           },
                           command: 'СЛЕДУЮЩИЙ'))
                 ],

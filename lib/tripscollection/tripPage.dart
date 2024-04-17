@@ -9,8 +9,8 @@ import 'package:travel_app/const.dart';
 import 'package:travel_app/widgets/custom_widgets.dart';
 import 'package:http/http.dart' as http;
 
-import '../placeDetails.dart';
-import '../placeDetailsHotels.dart';
+import '../place/placeDetails.dart';
+import '../place/placeDetailsHotels.dart';
 
 class Room {
   num capacity;

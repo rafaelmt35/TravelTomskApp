@@ -1,11 +1,13 @@
+// ignore_for_file: file_names, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:travel_app/const.dart';
-import 'package:travel_app/placeDetails.dart';
-import 'package:travel_app/placeDetailsHotels.dart';
+import 'package:travel_app/place/placeDetails.dart';
+import 'package:travel_app/place/placeDetailsHotels.dart';
 
 class PlaceSearchPage extends StatefulWidget {
   const PlaceSearchPage({Key? key, required this.query, required this.title})

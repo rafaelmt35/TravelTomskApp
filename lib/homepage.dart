@@ -11,7 +11,7 @@ import 'package:travel_app/signin_service/googlesignin.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:travel_app/listPlacesfromAPI.dart';
+import 'package:travel_app/place/listPlacesfromAPI.dart';
 import 'package:travel_app/tripscollection/collectiontrip.dart';
 
 import 'widgets/custom_widgets.dart';

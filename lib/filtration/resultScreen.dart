@@ -11,8 +11,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:travel_app/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:travel_app/const.dart';
-import 'package:travel_app/placeDetails.dart';
-import 'package:travel_app/placeDetailsHotels.dart';
+import 'package:travel_app/place/placeDetails.dart';
+import 'package:travel_app/place/placeDetailsHotels.dart';
 import 'dart:convert';
 import '../const.dart';
 

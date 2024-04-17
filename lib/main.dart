@@ -5,10 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/homepage.dart';
 import 'package:travel_app/signin_service/googlesignin.dart';
-import 'package:travel_app/signin_service/signin.dart';
 import 'package:travel_app/signin_service/signup.dart';
-import 'package:travel_app/listPlacesfromAPI.dart';
-import 'dart:io';
+
 
 import 'package:travel_app/splashScreen.dart';
 
