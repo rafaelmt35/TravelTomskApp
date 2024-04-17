@@ -17,7 +17,6 @@ class PlaceDetailsHotel extends StatefulWidget {
 }
 
 class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
-  // final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   late List<Map<String, dynamic>> hotels;
   late GoogleMapController mapController;
 
