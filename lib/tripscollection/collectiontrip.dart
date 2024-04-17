@@ -40,8 +40,12 @@ class _CollectionTripsState extends State<CollectionTrips> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: maincolor,
-        title: const Text('Коллекция поездок'),
+        title: const Text(
+          'Коллекция поездок',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(8.0),

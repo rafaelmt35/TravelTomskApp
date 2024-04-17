@@ -1,27 +1,25 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:travel_app/const.dart';
 import 'dart:convert';
 
+import 'package:travel_app/const.dart';
 import 'package:travel_app/placeDetails.dart';
 import 'package:travel_app/placeDetailsHotels.dart';
 
 class PlaceSearchPage extends StatefulWidget {
-  const PlaceSearchPage({Key? key, required this.query}) : super(key: key);
+  const PlaceSearchPage({Key? key, required this.query, required this.title})
+      : super(key: key);
   final String query;
+  final String title;
+
   @override
-  // ignore: library_private_types_in_public_api
   _PlaceSearchPageState createState() => _PlaceSearchPageState();
 }
 
 class _PlaceSearchPageState extends State<PlaceSearchPage> {
-  // String apiKey = dotenv.env['API_KEY']!;
   List<String> places = [];
   List<String> listPlaceId = [];
-  List restaurantList = [];
   bool isLoading = true;
 
   @override
@@ -80,7 +78,6 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
       print('LAT : ${placeDetails['geometry']['location']['lat']}');
       print('LAT : ${placeDetails['geometry']['location']['lng']}');
 
-      // Navigate to details page with placeDetails
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -94,29 +91,118 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
     }
   }
 
+  Future<void> _refreshPlaces() async {
+    // Fetch places again
+    await fetchPlaces();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: maincolor,
-        title: Text(widget.query),
+        title: Text(
+          widget.title,
+          style: const TextStyle(color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final String? selectedPlace = await showSearch<String>(
+                context: context,
+                delegate: PlaceSearchDelegate(places: places),
+              );
+              if (selectedPlace != null) {
+                fetchPlaceDetails(listPlaceId[places.indexOf(selectedPlace)]);
+              }
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: places.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(places[index]),
-                  onTap: () {
-                    // Handle tile tap
-                    print('Tile tapped: ${places[index]}');
-                    // Fetch details for the selected place
-                    fetchPlaceDetails(listPlaceId[index]);
-                  },
-                );
-              },
-            ),
+      body: RefreshIndicator(
+        onRefresh: _refreshPlaces,
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: places.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(places[index]),
+                    onTap: () {
+                      // Handle tile tap
+                      print('Tile tapped: ${places[index]}');
+                      // Fetch details for the selected place
+                      fetchPlaceDetails(listPlaceId[index]);
+                    },
+                  );
+                },
+              ),
+      ),
+    );
+  }
+}
+
+class PlaceSearchDelegate extends SearchDelegate<String> {
+  final List<String> places;
+
+  PlaceSearchDelegate({required this.places});
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: const Icon(Icons.clear),
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        close(context, '');
+      },
+      icon: const Icon(Icons.arrow_back),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return _buildSearchResults(context);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return _buildSearchResults(context);
+  }
+
+  Widget _buildSearchResults(BuildContext context) {
+    final List<String> matchedPlaces = places
+        .where((place) => place.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    if (matchedPlaces.isEmpty) {
+      return const Center(
+        child: Text('Подходящих мест не найдено.'),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: matchedPlaces.length,
+      itemBuilder: (context, index) {
+        final String place = matchedPlaces[index];
+        return ListTile(
+          title: Text(place),
+          onTap: () {
+            close(context, place);
+          },
+        );
+      },
     );
   }
 }

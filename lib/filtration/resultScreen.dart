@@ -275,303 +275,302 @@ class _ResultFiltrationState extends State<ResultFiltration> {
     int selectedvalue = 0;
     TextEditingController nametripsave = TextEditingController();
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Результат'),
-          backgroundColor: maincolor,
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'Результат',
+          style: TextStyle(color: Colors.white),
         ),
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.all(10.0),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Ваш бюджет : ${widget.maxBudget.toString()} ₽',
-                  style: const TextStyle(
-                      fontSize: 19.0, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Ресторан  $pricelevel ',
-                  style: const TextStyle(
-                      fontSize: 19.0, fontWeight: FontWeight.bold),
-                ),
-                isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : Container(
-                        margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1.0),
-                            borderRadius: BorderRadius.circular(10)),
-                        height: 180.0,
-                        child: Scrollbar(
-                          child: ListView.builder(
-                            itemCount: restaurantList.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(restaurantListName[index]),
-                                onTap: () {
-                                  // Handle tile tap
-                                  print(
-                                      'Tile tapped: ${restaurantList[index]}');
-                                  // Fetch details for the selected place
-                                  fetchPlaceDetails(restaurantList[index]);
-                                },
-                              );
-                            },
-                          ),
+        backgroundColor: maincolor,
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Ваш бюджет : ${widget.maxBudget.toString()} ₽',
+                style: const TextStyle(
+                    fontSize: 19.0, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Ресторан  $pricelevel ',
+                style: const TextStyle(
+                    fontSize: 19.0, fontWeight: FontWeight.bold),
+              ),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Container(
+                      margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1.0),
+                          borderRadius: BorderRadius.circular(10)),
+                      height: 180.0,
+                      child: Scrollbar(
+                        child: ListView.builder(
+                          itemCount: restaurantList.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(restaurantListName[index]),
+                              onTap: () {
+                                // Handle tile tap
+                                print('Tile tapped: ${restaurantList[index]}');
+                                // Fetch details for the selected place
+                                fetchPlaceDetails(restaurantList[index]);
+                              },
+                            );
+                          },
                         ),
                       ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  '${widget.selectedplaces.join(', ')}',
-                  style: const TextStyle(
-                      fontSize: 19.0, fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(7.0),
-                  margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1.0),
-                      borderRadius: BorderRadius.circular(10)),
-                  height: 250.0,
-                  child: Scrollbar(
-                    child: ListView.builder(
-                      itemCount: placesMap.length * 2,
-                      itemBuilder: (context, index) {
-                        if (index.isOdd) {
-                          return const Divider();
-                        }
-
-                        final categoryIndex = index ~/ 2;
-                        final category =
-                            placesMap.keys.elementAt(categoryIndex);
-                        final places = placesMap[category] ?? [];
-                        final placesId = placesMapId[category] ?? [];
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('$category Section',
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 8),
-                            ...places.asMap().entries.map((entry) {
-                              final placeIndex = entry.key;
-                              final place = entry.value;
-                              final placeId = placesId[placeIndex];
-
-                              return ListTile(
-                                title: Text(place),
-                                onTap: () {
-                                  fetchPlaceDetails(placeId);
-                                  print('Selected Place: $place');
-                                  print('Place ID: $placeId');
-                                },
-                              );
-                            }),
-                          ],
-                        );
-                      },
                     ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                '${widget.selectedplaces.join(', ')}',
+                style: const TextStyle(
+                    fontSize: 19.0, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                padding: const EdgeInsets.all(7.0),
+                margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1.0),
+                    borderRadius: BorderRadius.circular(10)),
+                height: 250.0,
+                child: Scrollbar(
+                  child: ListView.builder(
+                    itemCount: placesMap.length * 2,
+                    itemBuilder: (context, index) {
+                      if (index.isOdd) {
+                        return const Divider();
+                      }
+
+                      final categoryIndex = index ~/ 2;
+                      final category = placesMap.keys.elementAt(categoryIndex);
+                      final places = placesMap[category] ?? [];
+                      final placesId = placesMapId[category] ?? [];
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('$category Section',
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 8),
+                          ...places.asMap().entries.map((entry) {
+                            final placeIndex = entry.key;
+                            final place = entry.value;
+                            final placeId = placesId[placeIndex];
+
+                            return ListTile(
+                              title: Text(place),
+                              onTap: () {
+                                fetchPlaceDetails(placeId);
+                                print('Selected Place: $place');
+                                print('Place ID: $placeId');
+                              },
+                            );
+                          }),
+                        ],
+                      );
+                    },
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Рекомендация отеля ',
-                  style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Список цен на отель <= ${widget.hotelBudget} ₽/ночь за ${widget.person} человек и ${widget.rooms} номер',
-                  style: const TextStyle(
-                      fontSize: 15.0, fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1.0),
-                      borderRadius: BorderRadius.circular(10)),
-                  height: 180.0,
-                  child: FutureBuilder(
-                      future: loadHotelData(),
-                      builder: ((context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (hotels.isNotEmpty) {
-                            return Scrollbar(
-                              child: ListView.builder(
-                                itemCount: hotels.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    trailing: getPriceForCapacity(
-                                                hotels[index], widget.person) ==
-                                            -1
-                                        ? const Text('Нет номера')
-                                        : Text(
-                                            '${getPriceForCapacity(hotels[index], widget.person)} ₽/ночь'),
-                                    title: Text(hotels[index]['name']),
-                                    subtitle: Text(
-                                        '${getPriceForCapacity(hotels[index], widget.person) * (widget.days - 1) * widget.rooms} ₽ за ${widget.days - 1} ночь и ${widget.rooms} комнат'),
-                                    onTap: () {
-                                      setState(() {
-                                        hotelPrice = getPriceForCapacity(
-                                            hotels[index], widget.person);
-                                        hotelName = hotels[index]['name'];
-                                      });
-                                      print(hotelPrice);
-                                    },
-                                  );
-                                },
-                              ),
-                            );
-                          } else {
-                            return const Center(
-                              child: Text(
-                                  'Ни один отель не соответствует критериям.'),
-                            );
-                          }
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Рекомендация отеля ',
+                style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                'Список цен на отель <= ${widget.hotelBudget} ₽/ночь за ${widget.person} человек и ${widget.rooms} номер',
+                style: const TextStyle(
+                    fontSize: 15.0, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1.0),
+                    borderRadius: BorderRadius.circular(10)),
+                height: 180.0,
+                child: FutureBuilder(
+                    future: loadHotelData(),
+                    builder: ((context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (hotels.isNotEmpty) {
+                          return Scrollbar(
+                            child: ListView.builder(
+                              itemCount: hotels.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  trailing: getPriceForCapacity(
+                                              hotels[index], widget.person) ==
+                                          -1
+                                      ? const Text('Нет номера')
+                                      : Text(
+                                          '${getPriceForCapacity(hotels[index], widget.person)} ₽/ночь'),
+                                  title: Text(hotels[index]['name']),
+                                  subtitle: Text(
+                                      '${getPriceForCapacity(hotels[index], widget.person) * (widget.days - 1) * widget.rooms} ₽ за ${widget.days - 1} ночь и ${widget.rooms} комнат'),
+                                  onTap: () {
+                                    setState(() {
+                                      hotelPrice = getPriceForCapacity(
+                                          hotels[index], widget.person);
+                                      hotelName = hotels[index]['name'];
+                                    });
+                                    print(hotelPrice);
+                                  },
+                                );
+                              },
+                            ),
+                          );
                         } else {
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: Text(
+                                'Ни один отель не соответствует критериям.'),
                           );
                         }
-                      })),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Расчет бюджета',
-                  style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
-                ),
-                if (hotelName != '')
-                  Text(hotelName,
-                      style: const TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold)),
-                if (hotelPrice != 0.0)
-                  Text('${hotelPrice.toString()} ₽/ночь',
-                      style: const TextStyle(fontSize: 16.0)),
-                Text(
-                    '${hotelPrice * (widget.days - 1) * widget.rooms} ₽/ночь за ${widget.days - 1} ночь и ${widget.rooms} комнат',
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    })),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Расчет бюджета',
+                style: TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
+              ),
+              if (hotelName != '')
+                Text(hotelName,
+                    style: const TextStyle(
+                        fontSize: 16.0, fontWeight: FontWeight.bold)),
+              if (hotelPrice != 0.0)
+                Text('${hotelPrice.toString()} ₽/ночь',
                     style: const TextStyle(fontSize: 16.0)),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Оставшийся бюджет : ',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                    '${widget.maxBudget} ₽ - ${hotelPrice * (widget.days - 1) * widget.rooms} ₽ = ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽'),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Бюджетная стоимость на день : ',
-                  style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                    ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${((widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days).toStringAsFixed(2)} ₽'),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Center(
-                        child: ButtonGoShort(
-                            callback: (context) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                        'Введите название для сохранения поездки'),
-                                    content: TextFormField(
-                                      controller: nametripsave,
-                                      decoration: const InputDecoration(
-                                        hintText: '...',
-                                      ),
+              Text(
+                  '${hotelPrice * (widget.days - 1) * widget.rooms} ₽/ночь за ${widget.days - 1} ночь и ${widget.rooms} комнат',
+                  style: const TextStyle(fontSize: 16.0)),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                'Оставшийся бюджет : ',
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                  '${widget.maxBudget} ₽ - ${hotelPrice * (widget.days - 1) * widget.rooms} ₽ = ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽'),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                'Бюджетная стоимость на день : ',
+                style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                  ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${((widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days).toStringAsFixed(2)} ₽'),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Center(
+                      child: ButtonGoShort(
+                          callback: (context) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Введите название для сохранения поездки'),
+                                  content: TextFormField(
+                                    controller: nametripsave,
+                                    decoration: const InputDecoration(
+                                      hintText: '...',
                                     ),
-                                    actions: [
-                                      ButtonGoShort(
-                                        callback: (context) {
-                                          Navigator.pop(
-                                              context); // Close the dialog
-                                        },
-                                        command: 'ОТМЕНИТЬ',
-                                      ),
-                                      ButtonGoShort(
-                                        callback: (context) {
-                                          String enteredText =
-                                              nametripsave.text;
-                                          Map<String, dynamic> data = {
-                                            'name': enteredText,
-                                            'maxBudget': widget.maxBudget,
-                                            'days': widget.days,
-                                            'room': widget.rooms,
-                                            'person': widget.person,
-                                            'RestaurantChoice':
-                                                widget.choiceFoodRate,
-                                            'RestaurantList': restaurantList,
-                                            'HotelList': hotels,
-                                            'Places': placesMapId,
-                                            'categoryChoose':
-                                                widget.selectedplaces,
-                                            'hotelBudget': widget.hotelBudget,
-                                            'uid': user!.uid
-                                          };
-                                          firestore
-                                              .collection('Trip')
-                                              .add(data)
-                                              .then((value) {
-                                            print('Data added successfully!');
-                                          }).catchError((error) {
-                                            print('Error adding data: $error');
-                                          });
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: ((context) => HomePage(
-                                                      signInWithoutGoogle: widget
-                                                          .signInWithoutGoogle))));
-                                        },
-                                        command: 'СОХРАНИТЬ',
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            command: 'СОХРАНИТЬ')),
-                    Center(
-                        child: ButtonGo(
-                            callback: (context) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, "/homepage", (_) => false);
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: ((context) => HomePage(
-                              //               signInWithoutGoogle:
-                              //                   widget.signInWithoutGoogle,
-                              //             ))));
-                            },
-                            command: 'ВЕРНУТЬСЯ НА ГЛАВНУЮ СТРАНИЦУ'))
-                  ],
-                )
-              ],
-            ),
+                                  ),
+                                  actions: [
+                                    ButtonGoShort(
+                                      callback: (context) {
+                                        Navigator.pop(
+                                            context); // Close the dialog
+                                      },
+                                      command: 'ОТМЕНИТЬ',
+                                    ),
+                                    ButtonGoShort(
+                                      callback: (context) {
+                                        String enteredText = nametripsave.text;
+                                        Map<String, dynamic> data = {
+                                          'name': enteredText,
+                                          'maxBudget': widget.maxBudget,
+                                          'days': widget.days,
+                                          'room': widget.rooms,
+                                          'person': widget.person,
+                                          'RestaurantChoice':
+                                              widget.choiceFoodRate,
+                                          'RestaurantList': restaurantList,
+                                          'HotelList': hotels,
+                                          'Places': placesMapId,
+                                          'categoryChoose':
+                                              widget.selectedplaces,
+                                          'hotelBudget': widget.hotelBudget,
+                                          'uid': user!.uid
+                                        };
+                                        firestore
+                                            .collection('Trip')
+                                            .add(data)
+                                            .then((value) {
+                                          print('Data added successfully!');
+                                        }).catchError((error) {
+                                          print('Error adding data: $error');
+                                        });
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: ((context) => HomePage(
+                                                    signInWithoutGoogle: widget
+                                                        .signInWithoutGoogle))));
+                                      },
+                                      command: 'СОХРАНИТЬ',
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          command: 'СОХРАНИТЬ')),
+                  Center(
+                      child: ButtonGo(
+                          callback: (context) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: ((context) => HomePage(
+                                          signInWithoutGoogle:
+                                              widget.signInWithoutGoogle,
+                                        ))));
+                            Navigator.popUntil(
+                                context, ModalRoute.withName('/'));
+                          },
+                          command: 'ВЕРНУТЬСЯ НА ГЛАВНУЮ СТРАНИЦУ'))
+                ],
+              )
+            ],
           ),
         ),
       ),

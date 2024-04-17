@@ -1,6 +1,3 @@
-// ignore_for_file: unused_import
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,8 +7,10 @@ import 'package:travel_app/homepage.dart';
 import 'package:travel_app/signin_service/googlesignin.dart';
 import 'package:travel_app/signin_service/signin.dart';
 import 'package:travel_app/signin_service/signup.dart';
-import 'package:travel_app/test.dart';
+import 'package:travel_app/listPlacesfromAPI.dart';
 import 'dart:io';
+
+import 'package:travel_app/splashScreen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,11 +31,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: const InitialPage(),
+        home: const SplashScreen(),
         routes: {
-          "/homepage": (_) => const HomePage(
-                signInWithoutGoogle: false,
-              ),
+          '/initial': (context) => const InitialPage(),
         },
       ),
     );
@@ -48,18 +45,24 @@ class InitialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
+
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
             return const Center(
               child: Text('Something went wrong'),
             );
           } else if (snapshot.hasData) {
-            return const HomePage(
-              signInWithoutGoogle: true,
-            );
+            return const HomePage(signInWithoutGoogle: true);
           } else {
             return const SignUpPage();
           }

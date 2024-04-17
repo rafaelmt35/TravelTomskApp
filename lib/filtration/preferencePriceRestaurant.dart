@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import, file_names
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/filtration/placesToVisit.dart';
 import 'package:travel_app/filtration/setMaxBudget.dart';
@@ -34,92 +36,106 @@ class _PreferenceRestaurantPriceState extends State<PreferenceRestaurantPrice> {
   TextEditingController controllersearch = TextEditingController();
 
   late bool newvalue;
-
+  bool isVisible = false;
   Choose? _choose;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: maincolor,
-        ),
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Установите диапазон цен для ресторана:',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Column(
-                children: <Widget>[
-                  ListTile(
-                    title: const Text('Недорогой'),
-                    leading: Radio<Choose>(
-                      value: Choose.notexpensive,
-                      groupValue: _choose,
-                      onChanged: (Choose? value) {
-                        setState(() {
-                          _choose = value;
-                        });
-                      },
-                    ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: maincolor,
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              'Установите диапазон цен для ресторана:',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Column(
+              children: <Widget>[
+                ListTile(
+                  title: const Text('Недорогой'),
+                  leading: Radio<Choose>(
+                    value: Choose.notexpensive,
+                    groupValue: _choose,
+                    onChanged: (Choose? value) {
+                      setState(() {
+                        _choose = value;
+                      });
+                    },
                   ),
-                  ListTile(
-                    title: const Text('Умеренный'),
-                    leading: Radio<Choose>(
-                      value: Choose.moderate,
-                      groupValue: _choose,
-                      onChanged: (Choose? value) {
-                        setState(() {
-                          _choose = value;
-                        });
-                      },
-                    ),
+                ),
+                ListTile(
+                  title: const Text('Умеренный'),
+                  leading: Radio<Choose>(
+                    value: Choose.moderate,
+                    groupValue: _choose,
+                    onChanged: (Choose? value) {
+                      setState(() {
+                        _choose = value;
+                      });
+                    },
                   ),
-                  ListTile(
-                    title: const Text('Дорогой'),
-                    leading: Radio<Choose>(
-                      value: Choose.expensive,
-                      groupValue: _choose,
-                      onChanged: (Choose? value) {
-                        setState(() {
-                          _choose = value;
-                        });
-                      },
-                    ),
+                ),
+                ListTile(
+                  title: const Text('Дорогой'),
+                  leading: Radio<Choose>(
+                    value: Choose.expensive,
+                    groupValue: _choose,
+                    onChanged: (Choose? value) {
+                      setState(() {
+                        _choose = value;
+                      });
+                    },
                   ),
-                  ListTile(
-                    title: const Text('Очень дорого'),
-                    leading: Radio<Choose>(
-                      value: Choose.veryexpensive,
-                      groupValue: _choose,
-                      onChanged: (Choose? value) {
-                        setState(() {
-                          _choose = value;
-                        });
-                      },
-                    ),
+                ),
+                ListTile(
+                  title: const Text('Очень дорого'),
+                  leading: Radio<Choose>(
+                    value: Choose.veryexpensive,
+                    groupValue: _choose,
+                    onChanged: (Choose? value) {
+                      setState(() {
+                        _choose = value;
+                      });
+                    },
                   ),
-                ],
+                ),
+              ],
+            ),
+            Visibility(
+              visible: isVisible,
+              child: const Text(
+                '*Поле не заполнено',
+                style: TextStyle(color: Colors.red),
               ),
-              const SizedBox(
-                height: 85,
-              ),
-              Center(
-                  child: ButtonGo(
-                      callback: (context) {
+            ),
+            const SizedBox(
+              height: 85,
+            ),
+            Center(
+                child: ButtonGo(
+                    callback: (context) {
+                      setState(() {
+                        isVisible = _choose == null;
+                      });
+                      if (_choose != null) {
+                        setState(() {
+                          isVisible = false;
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -133,10 +149,10 @@ class _PreferenceRestaurantPriceState extends State<PreferenceRestaurantPrice> {
                                       person: widget.person,
                                       hotelBudget: widget.hotelBudget,
                                     ))));
-                      },
-                      command: 'СЛЕДУЮЩИЙ'))
-            ],
-          ),
+                      }
+                    },
+                    command: 'СЛЕДУЮЩИЙ'))
+          ],
         ),
       ),
     );

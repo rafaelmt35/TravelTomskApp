@@ -74,7 +74,7 @@ class TripPage extends StatefulWidget {
 
 class _TripPageState extends State<TripPage> {
   List<String> RestaurantName = [];
-
+  bool isLoadingDetails = false;
   Future<String?> getPlaceName(String placeId) async {
     final apiUrl = Uri.parse(
         'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
@@ -110,54 +110,54 @@ class _TripPageState extends State<TripPage> {
   }
 
   Future<void> fetchPlaceDetails(String placeId) async {
-    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    final apiUrl =
-        Uri.parse('$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
-    final response = await http.get(apiUrl);
+    setState(() {
+      isLoadingDetails = true; // Add a loading state
+    });
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+    try {
+      const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
+      final apiUrl = Uri.parse(
+          '$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
+      final response = await http.get(apiUrl);
 
-      final placeDetails = data['result'];
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
 
-      print('Place Name: ${placeDetails['name']}');
-      print('Place Address: ${placeDetails['formatted_address']}');
-      if (placeDetails['photos'] != null) {
-        for (var photo in placeDetails['photos']) {
-          final photoReference = photo['photo_reference'];
-          final photoUrl =
-              'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
-          print('Photo URL: $photoUrl');
+        final placeDetails = data['result'];
+
+        print('Place Name: ${placeDetails['name']}');
+        print('Place Address: ${placeDetails['formatted_address']}');
+        if (placeDetails['photos'] != null) {
+          for (var photo in placeDetails['photos']) {
+            final photoReference = photo['photo_reference'];
+            final photoUrl =
+                'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
+            print('Photo URL: $photoUrl');
+          }
         }
-      }
-      print('Rating: ${placeDetails['rating']}');
-      print(
-          'formatted_phone_number: ${placeDetails['formatted_phone_number']}');
-      print('website: ${placeDetails['website']}');
-      print('price_level: ${placeDetails['price_level']}');
+        print('Rating: ${placeDetails['rating']}');
+        print(
+            'formatted_phone_number: ${placeDetails['formatted_phone_number']}');
+        print('website: ${placeDetails['website']}');
+        print('price_level: ${placeDetails['price_level']}');
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PlaceDetails(placeDetails: placeDetails),
-        ),
-      );
-    } else {
-      throw Exception('Failed to load place details');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlaceDetails(placeDetails: placeDetails),
+          ),
+        );
+      } else {
+        throw Exception('Failed to load place details');
+      }
+    } catch (e) {
+      print('Error fetching place details: $e');
+    } finally {
+      setState(() {
+        isLoadingDetails = false; // Set loading state to false when done
+      });
     }
   }
-
-  // Future<void> fetchPlacesNames() async {
-  //   for (String placeId in widget.RestaurantList!) {
-  //     String? placeName = await getPlaceName(placeId);
-
-  //     if (placeName != null) {
-  //       setState(() {
-  //         RestaurantName.add(placeName);
-  //       });
-  //     }
-  //   }
-  // }
 
   Future<void> fetchRestaurantNames() async {
     for (String placeId in widget.RestaurantList!) {
@@ -173,8 +173,8 @@ class _TripPageState extends State<TripPage> {
 
   Future<void> fetchHotelDetails(String placeId) async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    final apiUrl =
-        Uri.parse('$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
+    final apiUrl = Uri.parse(
+        '$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
     final response = await http.get(apiUrl);
 
     if (response.statusCode == 200) {
@@ -222,7 +222,11 @@ class _TripPageState extends State<TripPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name!),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          widget.name!,
+          style: const TextStyle(color: Colors.white),
+        ),
         backgroundColor: maincolor,
       ),
       body: Container(
@@ -268,20 +272,35 @@ class _TripPageState extends State<TripPage> {
                 padding: const EdgeInsets.all(7.0),
                 margin: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                 decoration: BoxDecoration(
-                    border: Border.all(width: 1.0),
-                    borderRadius: BorderRadius.circular(10)),
-                height: 150.0,
-                child: ListView.builder(
-                  itemCount: widget.RestaurantList!.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(RestaurantName[index]),
-                      onTap: () {
-                        fetchPlaceDetails(widget.RestaurantList![index]);
-                      },
-                    );
-                  },
+                  border: Border.all(width: 1.0),
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                height: 150.0,
+                child: isLoadingDetails
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : widget.RestaurantList != null &&
+                            widget.RestaurantList!.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: widget.RestaurantList!.length,
+                            itemBuilder: (context, index) {
+                              if (index < RestaurantName.length) {
+                                return ListTile(
+                                  title: Text(RestaurantName[index]),
+                                  onTap: () {
+                                    fetchPlaceDetails(
+                                        widget.RestaurantList![index]);
+                                  },
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            },
+                          )
+                        : const Center(
+                            child: Text('No restaurant found'),
+                          ),
               ),
               const SizedBox(
                 height: 20.0,

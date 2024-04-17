@@ -11,7 +11,7 @@ import 'package:travel_app/signin_service/googlesignin.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:travel_app/test.dart';
+import 'package:travel_app/listPlacesfromAPI.dart';
 import 'package:travel_app/tripscollection/collectiontrip.dart';
 
 import 'widgets/custom_widgets.dart';
@@ -36,260 +36,267 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query<Map<String, dynamic>> placeCollectionReference =
         firestore.collection('Place').limit(8);
+    FocusScope.of(context).requestFocus(_focusNode);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(120),
-            child: AppBar(
-              elevation: 8,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(110),
+          child: AppBar(
+            elevation: 8,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25))),
+            toolbarHeight: 18,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  color: maincolor,
+                  borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25))),
-              toolbarHeight: 18,
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                    color: maincolor,
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(25),
-                        bottomRight: Radius.circular(25))),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(21, 5, 15, 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Hello ... !',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Row(
-                            children: [
-                              FloatingActionButton(
-                                heroTag: null,
-                                elevation: 0.0,
-                                onPressed: () async {
-                                  if (widget.signInWithoutGoogle == true) {
-                                    FirebaseAuth
-                                        .instance.currentUser?.providerData;
-                                    await FirebaseAuth.instance.signOut();
-                                  } else {
-                                    final provider =
-                                        Provider.of<GoogleSignInProvider>(
-                                            context,
-                                            listen: false);
-                                    provider.googleLogOut();
-                                  }
-                                },
-                                backgroundColor: Colors.transparent,
-                                splashColor: Colors.grey.withOpacity(0.4),
-                                mini: true,
-                                child: const Icon(
-                                  Icons.logout,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(21, 3, 15, 7),
-                      child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Куда хотите пойти сегодня?',
-                            style: TextStyle(
-                                color: Color(0xff002A69),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                fontFamily: 'Inter'),
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: [
-                      ButtonMenuLong(
-                        callback: (context) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CollectionTrips(
-                                        uid: user!.uid,
-                                      )));
-                        },
-                        command: 'КОЛЛЕКЦИЯ',
-                        iconname: Icons.collections,
-                      ),
-                      ButtonMenuLong(
-                        callback: (context) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CountDays(
-                                        signInWithoutGoogle:
-                                            widget.signInWithoutGoogle,
-                                      )));
-                        },
-                        command: 'БЮДЖЕТ',
-                        iconname: Icons.monetization_on,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SizedBox(
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(21, 28, 15, 8),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Smallmenubox(
-                          iconname: Icons.hotel,
-                          menuname: 'Отели',
-                          callback: (context) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const PlaceSearchPage(
-                                      query: 'hotel',
-                                    )));
-                          },
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Hello ... !',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600),
                         ),
-                        Smallmenubox(
-                          iconname: Icons.food_bank_outlined,
-                          menuname: 'Ресторан',
-                          callback: (context) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const PlaceSearchPage(
-                                      query: 'restaurant',
-                                    )));
-                          },
-                        ),
-                        Smallmenubox(
-                          iconname: Icons.park_outlined,
-                          menuname: 'Парк',
-                          callback: (context) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const PlaceSearchPage(
-                                      query: 'park',
-                                    )));
-                          },
-                        ),
-                        Smallmenubox(
-                          iconname: Icons.coffee_rounded,
-                          menuname: 'Кафе',
-                          callback: (context) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const PlaceSearchPage(
-                                      query: 'cafe',
-                                    )));
-                          },
-                        ),
+                        Row(
+                          children: [
+                            FloatingActionButton(
+                              heroTag: null,
+                              elevation: 0.0,
+                              onPressed: () async {
+                                if (widget.signInWithoutGoogle == true) {
+                                  FirebaseAuth
+                                      .instance.currentUser?.providerData;
+                                  await FirebaseAuth.instance.signOut();
+                                } else {
+                                  final provider =
+                                      Provider.of<GoogleSignInProvider>(context,
+                                          listen: false);
+                                  provider.googleLogOut();
+                                }
+                              },
+                              backgroundColor: Colors.transparent,
+                              splashColor: Colors.grey.withOpacity(0.4),
+                              mini: true,
+                              child: const Icon(
+                                Icons.logout,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
-                  Row(
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(21, 3, 15, 7),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Куда хотите пойти сегодня?',
+                          style: TextStyle(
+                              color: Color(0xff002A69),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              fontFamily: 'Inter'),
+                        )),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: [
+                    ButtonMenuLong(
+                      callback: (context) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CollectionTrips(
+                                      uid: user!.uid,
+                                    )));
+                      },
+                      command: 'КОЛЛЕКЦИЯ',
+                      iconname: Icons.collections,
+                    ),
+                    ButtonMenuLong(
+                      callback: (context) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CountDays(
+                                      signInWithoutGoogle:
+                                          widget.signInWithoutGoogle,
+                                    )));
+                      },
+                      command: 'БЮДЖЕТ',
+                      iconname: Icons.monetization_on,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Smallmenubox(
-                        iconname: Icons.local_pharmacy,
-                        menuname: 'Аптека',
+                        iconname: Icons.hotel,
+                        menuname: 'Отели',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'pharmacy',
+                                    title: 'Отели',
+                                    query: 'hotel',
                                   )));
                         },
                       ),
                       Smallmenubox(
-                        iconname: Icons.museum,
-                        menuname: 'Музей',
+                        iconname: Icons.food_bank_outlined,
+                        menuname: 'Ресторан',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'museums',
+                                    title: 'Ресторан',
+                                    query: 'restaurant',
                                   )));
                         },
                       ),
                       Smallmenubox(
-                        iconname: Icons.local_mall_sharp,
-                        menuname: 'ТЦ',
+                        iconname: Icons.park_outlined,
+                        menuname: 'Парк',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'malls',
+                                    title: 'Парк',
+                                    query: 'park',
                                   )));
                         },
                       ),
                       Smallmenubox(
-                        iconname: Icons.school,
-                        menuname: 'Университет',
+                        iconname: Icons.coffee_rounded,
+                        menuname: 'Кафе',
                         callback: (context) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const PlaceSearchPage(
-                                    query: 'university',
+                                    title: 'Кафе',
+                                    query: 'cafe',
                                   )));
                         },
                       ),
                     ],
                   ),
-                  CommandWidget('Рекомендация', () {}),
-                  SizedBox(
-                    height: 235.0,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const ClampingScrollPhysics(),
-                        children: [
-                          StreamBuilder<QuerySnapshot>(
-                            stream: placeCollectionReference.snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Row(
-                                    children: snapshot.data!.docs
-                                        .map((e) => Citycardmenu(
-                                              imagename: (e.data()
-                                                  as dynamic)['image'],
-                                              cityname:
-                                                  (e.data() as dynamic)['name'],
-                                              callback: (context) {},
-                                            ))
-                                        .toList());
-                              } else {
-                                return const Text('Loading');
-                              }
-                            },
-                          )
-                        ],
-                      ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Smallmenubox(
+                      iconname: Icons.local_pharmacy,
+                      menuname: 'Аптека',
+                      callback: (context) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const PlaceSearchPage(
+                                  title: 'Аптека',
+                                  query: 'pharmacy',
+                                )));
+                      },
+                    ),
+                    Smallmenubox(
+                      iconname: Icons.museum,
+                      menuname: 'Музей',
+                      callback: (context) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const PlaceSearchPage(
+                                  title: 'Музей',
+                                  query: 'museums',
+                                )));
+                      },
+                    ),
+                    Smallmenubox(
+                      iconname: Icons.local_mall_sharp,
+                      menuname: 'ТЦ',
+                      callback: (context) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const PlaceSearchPage(
+                                  title: 'ТЦ',
+                                  query: 'malls',
+                                )));
+                      },
+                    ),
+                    Smallmenubox(
+                      iconname: Icons.school,
+                      menuname: 'Университет',
+                      callback: (context) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const PlaceSearchPage(
+                                  title: 'Университет',
+                                  query: 'university',
+                                )));
+                      },
+                    ),
+                  ],
+                ),
+                CommandWidget('Рекомендация', () {}),
+                SizedBox(
+                  height: 235.0,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      physics: const ClampingScrollPhysics(),
+                      children: [
+                        StreamBuilder<QuerySnapshot>(
+                          stream: placeCollectionReference.snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                  children: snapshot.data!.docs
+                                      .map((e) => Citycardmenu(
+                                            imagename:
+                                                (e.data() as dynamic)['image'],
+                                            cityname:
+                                                (e.data() as dynamic)['name'],
+                                            callback: (context) {},
+                                          ))
+                                      .toList());
+                            } else {
+                              return const Text('Loading');
+                            }
+                          },
+                        )
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -297,5 +304,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-//NEXT TRIP MENU

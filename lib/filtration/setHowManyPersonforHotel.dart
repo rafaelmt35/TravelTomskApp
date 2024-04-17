@@ -24,7 +24,7 @@ class CountPersonForRoom extends StatefulWidget {
 class _CountPersonForRoomState extends State<CountPersonForRoom> {
   TextEditingController controllerRoom = TextEditingController();
   TextEditingController controllerPerson = TextEditingController();
-
+  bool isVisible = false;
   @override
   void initState() {
     super.initState();
@@ -32,107 +32,123 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: maincolor,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      'Сколько комнат/номеров вам нужны?',
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        width: 350.0,
-                        height: 80.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: TextField(
-                          controller: controllerRoom,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.black,
-                                    width: 5,
-                                    style: BorderStyle.solid),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            contentPadding: EdgeInsets.only(left: 10, top: 5),
-                            hintStyle: TextStyle(fontStyle: FontStyle.italic),
-                            fillColor: Colors.white,
-                          ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: maincolor,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'Сколько комнат/номеров вам нужны?',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      width: 350.0,
+                      height: 80.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: TextField(
+                        controller: controllerRoom,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 5,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          contentPadding: EdgeInsets.only(left: 10, top: 5),
+                          hintStyle: TextStyle(fontStyle: FontStyle.italic),
+                          fillColor: Colors.white,
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      'Сколько человек в комнате?',
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        width: 350.0,
-                        height: 80.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: TextField(
-                          controller: controllerPerson,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.black,
-                                    width: 5,
-                                    style: BorderStyle.solid),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            contentPadding: EdgeInsets.only(left: 10, top: 5),
-                            hintStyle: TextStyle(fontStyle: FontStyle.italic),
-                            fillColor: Colors.white,
-                          ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'Сколько человек в комнате?',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 18),
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      width: 350.0,
+                      height: 80.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: TextField(
+                        controller: controllerPerson,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 5,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          contentPadding: EdgeInsets.only(left: 10, top: 5),
+                          hintStyle: TextStyle(fontStyle: FontStyle.italic),
+                          fillColor: Colors.white,
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 40,
+                  ),
+                  Visibility(
+                    visible: isVisible,
+                    child: const Text(
+                      '*Поле не заполнено',
+                      style: TextStyle(color: Colors.red),
                     ),
-                    Center(
-                        child: ButtonGo(
-                            callback: (context) {
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Center(
+                      child: ButtonGo(
+                          callback: (context) {
+                            if (controllerRoom.text.isEmpty &&
+                                    controllerPerson.text.isEmpty ||
+                                controllerRoom.text.isEmpty ||
+                                controllerPerson.text.isEmpty) {
+                              setState(() {
+                                isVisible = true;
+                              });
+                            } else {
+                              setState(() {
+                                isVisible = false;
+                              });
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -146,13 +162,13 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                                             person: int.parse(
                                                 controllerPerson.text),
                                           ))));
-                            },
-                            command: 'СЛЕДУЮЩИЙ'))
-                  ],
-                ),
+                            }
+                          },
+                          command: 'СЛЕДУЮЩИЙ'))
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

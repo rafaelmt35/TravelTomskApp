@@ -174,7 +174,7 @@ class Smallmenubox extends StatelessWidget {
       children: [
         SizedBox(
           height: 72,
-          width: 72,
+          width: MediaQuery.of(context).size.width / 5.5,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.grey,
@@ -204,7 +204,7 @@ class Smallmenubox extends StatelessWidget {
               child: Text(
             menuname,
             style: const TextStyle(
-                fontSize: 12.5, color: Colors.black, fontFamily: 'Inter'),
+                fontSize: 11, color: Colors.black, fontFamily: 'Inter'),
           )),
         )
       ],
@@ -331,7 +331,7 @@ class ButtonMenuLong extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 20, bottom: 15),
       height: 60,
-      width: 170,
+      width: MediaQuery.of(context).size.width / 2.3,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.grey,
