@@ -1,4 +1,4 @@
-# Travel App Go-Travel
+# Travel Tomsk
 
 Android application for finding recommended places in Tomsk, Russia.
 
