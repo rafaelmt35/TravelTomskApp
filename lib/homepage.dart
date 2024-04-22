@@ -92,6 +92,7 @@ class _HomePageState extends State<HomePage> {
                                       Provider.of<GoogleSignInProvider>(context,
                                           listen: false);
                                   provider.googleLogOut();
+                                  await FirebaseAuth.instance.signOut();
                                 }
                               },
                               backgroundColor: Colors.transparent,
