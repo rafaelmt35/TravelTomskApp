@@ -545,8 +545,11 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: ((context) => HomePage(
-                                                    signInWithoutGoogle: widget
-                                                        .signInWithoutGoogle))));
+                                                      signInWithoutGoogle: widget
+                                                          .signInWithoutGoogle,
+                                                    ))));
+                                        Navigator.popUntil(
+                                            context, ModalRoute.withName('/'));
 
                                         print('Entered Text: $enteredText');
                                       },
