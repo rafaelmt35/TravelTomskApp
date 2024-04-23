@@ -32,9 +32,10 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
 
   Future<void> fetchPlaces() async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    const String townName = 'Tomsk';
+    const String townName = 'Tomsk, Russia';
+
     final apiUrl = Uri.parse(
-        '$baseUrl/textsearch/json?query=${widget.query}&location=$townName&key=${dotenv.env["API_KEY"]}');
+        '$baseUrl/textsearch/json?query=${widget.query}+in+$townName&location=$townName&key=${dotenv.env["API_KEY"]}');
     final response = await http.get(apiUrl);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

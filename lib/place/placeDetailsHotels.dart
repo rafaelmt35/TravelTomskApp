@@ -184,8 +184,14 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                     ? true
                     : false,
                 child: InkWell(
-                  onTap: () {
-                    launchUrl(widget.placeDetails['formatted_phone_number']);
+                  onTap: () async {
+                    final phoneNumber =
+                        'tel:${widget.placeDetails['formatted_phone_number']}';
+                    if (await canLaunchUrl(Uri.parse(phoneNumber))) {
+                      await launchUrl(Uri.parse(phoneNumber));
+                    } else {
+                      throw 'Could not launch $phoneNumber';
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -250,7 +256,13 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                 visible: widget.placeDetails['website'] != null ? true : false,
                 child: InkWell(
                   onTap: () async {
-                    launchUrl(widget.placeDetails['website']);
+                    if (await canLaunchUrl(
+                        Uri.parse(widget.placeDetails['website']))) {
+                      await launchUrl(
+                          Uri.parse(widget.placeDetails['website']));
+                    } else {
+                      throw 'Could not launch ${widget.placeDetails['website']}';
+                    }
                   },
                   child: Text(
                     '${widget.placeDetails['website'] ?? 'N/A'}',
