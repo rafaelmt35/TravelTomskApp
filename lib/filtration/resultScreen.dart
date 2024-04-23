@@ -251,6 +251,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
 
   int hotelPrice = 0;
   String hotelName = '';
+  TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     String pricelevel = '';
@@ -499,22 +500,23 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                   title: const Text(
                                       'Введите название для сохранения поездки'),
                                   content: TextFormField(
-                                    controller: nametripsave,
+                                    controller: _textEditingController,
                                     decoration: const InputDecoration(
                                       hintText: '...',
                                     ),
                                   ),
                                   actions: [
-                                    ButtonGoShort(
-                                      callback: (context) {
+                                    TextButton(
+                                      onPressed: () {
                                         Navigator.pop(
                                             context); // Close the dialog
                                       },
-                                      command: 'ОТМЕНИТЬ',
+                                      child: const Text('ОТМЕНИТЬ'),
                                     ),
-                                    ButtonGoShort(
-                                      callback: (context) {
-                                        String enteredText = nametripsave.text;
+                                    TextButton(
+                                      onPressed: () {
+                                        String enteredText =
+                                            _textEditingController.text;
                                         Map<String, dynamic> data = {
                                           'name': enteredText,
                                           'maxBudget': widget.maxBudget,
@@ -545,8 +547,10 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                                 builder: ((context) => HomePage(
                                                     signInWithoutGoogle: widget
                                                         .signInWithoutGoogle))));
+
+                                        print('Entered Text: $enteredText');
                                       },
-                                      command: 'СОХРАНИТЬ',
+                                      child: const Text('СОХРАНИТЬ'),
                                     ),
                                   ],
                                 );

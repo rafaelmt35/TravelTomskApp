@@ -36,13 +36,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  final FocusNode _focusNode = FocusNode();
+  
+
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query<Map<String, dynamic>> placeCollectionReference =
         firestore.collection('Place').limit(8);
-    FocusScope.of(context).requestFocus(_focusNode);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
