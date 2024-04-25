@@ -251,7 +251,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
 
   int hotelPrice = 0;
   String hotelName = '';
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     String pricelevel = '';

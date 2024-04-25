@@ -235,20 +235,23 @@ class _PlaceDetailsHotelState extends State<PlaceDetailsHotel> {
                   style:
                       TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
               // Display rooms for the target hotel
-              ...(targetHotel['rooms'] as List<dynamic>).map(
-                (room) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    Text('Тип: ${room['type']}'),
-                    const SizedBox(height: 5),
-                    Text('Bместимость: ${room['capacity']}'),
-                    const SizedBox(height: 5),
-                    Text('Цена: ${room['price']} ₽ /ночь'),
-                    const SizedBox(height: 10),
+              ...(targetHotel['rooms'] as List<dynamic>?)?.map(
+                    (room) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 5),
+                        Text('Тип: ${room['type'] ?? 'N/A'}'),
+                        const SizedBox(height: 5),
+                        Text('Bместимость: ${room['capacity'] ?? 'N/A'}'),
+                        const SizedBox(height: 5),
+                        Text('Цена: ${room['price'] ?? 'N/A'} ₽ /ночь'),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ) ??
+                  [
+                    const Text('Данные о номерах не найдены'),
                   ],
-                ),
-              ),
               const SizedBox(
                 height: 15.0,
               ),

@@ -121,10 +121,9 @@ class Citycardmenu extends StatelessWidget {
         onTap: () => callback.call(context),
         child: Container(
             width: 172,
-            height: 180,
+            height: 200,
             decoration: BoxDecoration(
-                // ignore: unnecessary_new
-                image: new DecorationImage(
+                image: DecorationImage(
                   image: NetworkImage(imagename),
                   fit: BoxFit.cover,
                 ),

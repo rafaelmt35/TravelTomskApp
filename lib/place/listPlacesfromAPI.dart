@@ -30,6 +30,47 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
     fetchPlaces();
   }
 
+  Future<void> fetchPlaceDetailsByPlaceName(String placeName) async {
+    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
+    final apiKey = dotenv.env['API_KEY'];
+    const String townName = 'Tomsk, Russia';
+    final apiUrl = Uri.parse(
+        '$baseUrl/findplacefromtext/json?input=$placeName+in+$townName&inputtype=textquery&fields=place_id&key=$apiKey');
+
+    final response = await http.get(apiUrl);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final candidates = data['candidates'];
+
+      if (candidates.isNotEmpty) {
+        final placeId = candidates[0]['place_id'];
+        final detailsUrl =
+            Uri.parse('$baseUrl/details/json?place_id=$placeId&key=$apiKey');
+
+        final detailsResponse = await http.get(detailsUrl);
+
+        if (detailsResponse.statusCode == 200) {
+          final placeDetails = json.decode(detailsResponse.body)['result'];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => widget.query == 'hotel'
+                  ? PlaceDetailsHotel(placeDetails: placeDetails)
+                  : PlaceDetails(placeDetails: placeDetails),
+            ),
+          );
+        } else {
+          throw Exception('Failed to load place details');
+        }
+      } else {
+        throw Exception('Place not found');
+      }
+    } else {
+      throw Exception('Failed to search for place');
+    }
+  }
+
   Future<void> fetchPlaces() async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     const String townName = 'Tomsk, Russia';

@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'package:travel_app/filtration/selecthowmanydays.dart';
@@ -14,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/place/listPlacesfromAPI.dart';
 import 'package:travel_app/tripscollection/collectiontrip.dart';
 
+import 'place/placeDetails.dart';
 import 'widgets/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,8 +39,6 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -286,7 +288,62 @@ class _HomePageState extends State<HomePage> {
                                                 (e.data() as dynamic)['image'],
                                             cityname:
                                                 (e.data() as dynamic)['name'],
-                                            callback: (context) {},
+                                            callback: (context) async {
+                                              const String baseUrl =
+                                                  'https://maps.googleapis.com/maps/api/place';
+                                              final apiKey =
+                                                  dotenv.env['API_KEY'];
+                                              final apiUrl = Uri.parse(
+                                                  '$baseUrl/findplacefromtext/json?input=${(e.data() as dynamic)['name']}&inputtype=textquery&fields=place_id&key=$apiKey');
+
+                                              final response =
+                                                  await http.get(apiUrl);
+
+                                              if (response.statusCode == 200) {
+                                                final data =
+                                                    json.decode(response.body);
+                                                final candidates =
+                                                    data['candidates'];
+
+                                                if (candidates.isNotEmpty) {
+                                                  final placeId =
+                                                      candidates[0]['place_id'];
+                                                  final detailsUrl = Uri.parse(
+                                                      '$baseUrl/details/json?place_id=$placeId&key=$apiKey');
+
+                                                  final detailsResponse =
+                                                      await http
+                                                          .get(detailsUrl);
+
+                                                  if (detailsResponse
+                                                          .statusCode ==
+                                                      200) {
+                                                    final placeDetails = json
+                                                        .decode(detailsResponse
+                                                            .body)['result'];
+
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PlaceDetails(
+                                                                placeDetails:
+                                                                    placeDetails),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    throw Exception(
+                                                        'Failed to load place details');
+                                                  }
+                                                } else {
+                                                  throw Exception(
+                                                      'Place not found');
+                                                }
+                                              } else {
+                                                throw Exception(
+                                                    'Failed to search for place');
+                                              }
+                                            },
                                           ))
                                       .toList());
                             } else {

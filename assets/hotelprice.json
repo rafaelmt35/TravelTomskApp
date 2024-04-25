@@ -356,6 +356,31 @@
       ]
     },
     {
+      "name": "Sport-Hotel",
+      "rooms": [
+        {
+          "type": "single",
+          "capacity": 1,
+          "price": 2000
+        },
+        {
+          "type": "double",
+          "capacity": 2,
+          "price": 2350
+        },
+        {
+          "type": "triple",
+          "capacity": 3,
+          "price": 2800
+        },
+        {
+          "type": "suite",
+          "capacity": 4,
+          "price": 5000
+        }
+      ]
+    },
+    {
       "name": "Hotel \"Bastogne\"",
       "rooms": [
         {
