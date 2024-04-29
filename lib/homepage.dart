@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query<Map<String, dynamic>> placeCollectionReference =
-        firestore.collection('Place').limit(8);
+        firestore.collection('Place');
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
