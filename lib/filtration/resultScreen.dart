@@ -474,7 +474,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
               ),
               Text(
-                  '${widget.maxBudget} ₽ - ${hotelPrice * (widget.days - 1) * widget.rooms} ₽ = ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽'),
+                  '${widget.maxBudget} ₽ - ${hotelPrice * (widget.days - 1) * widget.rooms} ₽ = ${(widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)).isNegative ? 'у вас недостаточно бюджета' : (widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms))} '),
               const SizedBox(
                 height: 15,
               ),
@@ -483,7 +483,7 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                 style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
               ),
               Text(
-                  ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${((widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days).toStringAsFixed(2)} ₽'),
+                  ' ${widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)} ₽ / ${widget.days} = ${((widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days).isNegative ? 'у вас недостаточно бюджета' : ((widget.maxBudget - (hotelPrice * (widget.days - 1) * widget.rooms)) / widget.days).toStringAsFixed(2)} '),
               const SizedBox(
                 height: 20,
               ),

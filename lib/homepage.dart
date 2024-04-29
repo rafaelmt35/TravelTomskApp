@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
 
@@ -18,6 +18,7 @@ import 'package:travel_app/place/listPlacesfromAPI.dart';
 import 'package:travel_app/tripscollection/collectiontrip.dart';
 
 import 'place/placeDetails.dart';
+import 'place/recommendationPlace.dart';
 import 'widgets/custom_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -267,7 +268,43 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                CommandWidget('Рекомендация', () {}),
+                Row(
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(21, 11, 10, 10),
+                      child: Text(
+                        'Рекомендация',
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Inter',
+                            color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 23,
+                      width: 23,
+                      child: FloatingActionButton(
+                        heroTag: null,
+                        backgroundColor: const Color(0xff588CDA),
+                        elevation: 0.2,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const RecommendationPage(
+                                          title: 'Рекомендация')));
+                        },
+                        child: const Icon(
+                          Icons.double_arrow_outlined,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: 235.0,
                   child: Padding(

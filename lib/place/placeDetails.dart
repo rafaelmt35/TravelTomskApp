@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:travel_app/const.dart';
@@ -7,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PlaceDetails extends StatefulWidget {
-  const PlaceDetails({super.key, required this.placeDetails});
+  const PlaceDetails({Key? key, required this.placeDetails}) : super(key: key);
   final Map<String, dynamic> placeDetails;
 
   @override
@@ -15,47 +13,41 @@ class PlaceDetails extends StatefulWidget {
 }
 
 class _PlaceDetailsState extends State<PlaceDetails> {
-  // final apiKey = 'AIzaSyCuWazdpZriMm2R4MP3wDP7kyylL40nrcg';
   late GoogleMapController mapController;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    String pricelevel = '';
+    String priceLevelText = '';
     bool visiblePriceLevel = false;
 
+    final List<String> weekdayText =
+        (widget.placeDetails['opening_hours'] != null &&
+                widget.placeDetails['opening_hours']['weekday_text'] != null)
+            ? List<String>.from(
+                widget.placeDetails['opening_hours']['weekday_text'])
+            : [];
+
     if (widget.placeDetails['price_level'] != null) {
-      setState(() {
-        visiblePriceLevel = true;
-      });
-      if (widget.placeDetails['price_level']! == 0) {
-        setState(() {
-          pricelevel = 'Free';
-        });
-      } else if (widget.placeDetails['price_level']! == 1) {
-        setState(() {
-          pricelevel = '\$';
-        });
-      } else if (widget.placeDetails['price_level']! == 2) {
-        setState(() {
-          pricelevel = '\$\$';
-        });
-      } else if (widget.placeDetails['price_level']! == 3) {
-        setState(() {
-          pricelevel = '\$\$\$';
-        });
-      } else if (widget.placeDetails['price_level']! == 4) {
-        setState(() {
-          pricelevel = '\$\$\$\$';
-        });
+      visiblePriceLevel = true;
+      switch (widget.placeDetails['price_level']) {
+        case 0:
+          priceLevelText = 'Free';
+          break;
+        case 1:
+          priceLevelText = '\$';
+          break;
+        case 2:
+          priceLevelText = '\$\$';
+          break;
+        case 3:
+          priceLevelText = '\$\$\$';
+          break;
+        case 4:
+          priceLevelText = '\$\$\$\$';
+          break;
+        default:
+          priceLevelText = '';
+          break;
       }
     }
 
@@ -68,15 +60,15 @@ class _PlaceDetailsState extends State<PlaceDetails> {
         height: MediaQuery.of(context).size.height,
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (widget.placeDetails['photos'] != null &&
                   widget.placeDetails['photos'].isNotEmpty)
                 Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   height: 250.0,
                   child: Scrollbar(
                     child: ListView.builder(
@@ -91,71 +83,67 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                         return Container(
                           margin: const EdgeInsets.all(8.0),
                           padding: const EdgeInsets.all(8.0),
-                          width: MediaQuery.of(context).size.width -
-                              70, // Adjust the width as needed
-
+                          width: MediaQuery.of(context).size.width - 70,
                           decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(
-                                    photoUrl,
-                                  ),
-                                  fit: BoxFit.cover),
-                              borderRadius: BorderRadius.circular(10)),
+                            image: DecorationImage(
+                              image: NetworkImage(photoUrl),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         );
                       },
                     ),
                   ),
                 ),
-              const SizedBox(
-                height: 20.0,
-              ),
+              const SizedBox(height: 20.0),
               Visibility(
-                visible: widget.placeDetails['name'] != null ? true : false,
+                visible: widget.placeDetails['name'] != null,
                 child: Text(
-                  widget.placeDetails['name'],
+                  widget.placeDetails['name'] ?? '',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 25.0, fontWeight: FontWeight.bold),
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 15.0,
-              ),
+              const SizedBox(height: 15.0),
               if (widget.placeDetails['rating'] != null)
-                Text('Оценка: ${widget.placeDetails['rating']}',
-                    style: const TextStyle(
-                        fontSize: 15.0, fontWeight: FontWeight.w500)),
-              const SizedBox(
-                height: 15.0,
-              ),
+                Text(
+                  'Оценка: ${widget.placeDetails['rating']}',
+                  style: const TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              const SizedBox(height: 15.0),
               Visibility(
-                  visible: visiblePriceLevel,
-                  child: Text(
-                    pricelevel,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 15.0, fontWeight: FontWeight.w500),
-                  )),
-              const SizedBox(
-                height: 15.0,
+                visible: visiblePriceLevel,
+                child: Text(
+                  priceLevelText,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
+              const SizedBox(height: 15.0),
               Visibility(
-                  visible: widget.placeDetails['formatted_address'] != null
-                      ? true
-                      : false,
-                  child: Text(
-                    widget.placeDetails['formatted_address'],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 15.0, fontWeight: FontWeight.w500),
-                  )),
-              const SizedBox(
-                height: 15.0,
+                visible: widget.placeDetails['formatted_address'] != null,
+                child: Text(
+                  widget.placeDetails['formatted_address'] ?? '',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
+              const SizedBox(height: 15.0),
               Visibility(
-                visible: widget.placeDetails['formatted_phone_number'] != null
-                    ? true
-                    : false,
+                visible: widget.placeDetails['formatted_phone_number'] != null,
                 child: InkWell(
                   onTap: () async {
                     final phoneNumber =
@@ -177,39 +165,44 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                         '${widget.placeDetails['formatted_phone_number'] ?? 'N/A'}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.w500),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 15.0,
-              ),
+              const SizedBox(height: 15.0),
               const Text(
                 'Часы работы: ',
-                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              const SizedBox(
-                height: 5.0,
-              ),
-              widget.placeDetails['opening_hours'] != null
-                  ? Text(
-                      '${widget.placeDetails['opening_hours']['weekday_text'].join('\n')}',
-                      style: const TextStyle(fontSize: 15.0))
-                  : const Text('Нет расписания',
-                      style: TextStyle(fontSize: 15.0)),
-              const SizedBox(
-                height: 15.0,
-              ),
-              const SizedBox(
-                height: 15.0,
-              ),
+              const SizedBox(height: 5.0),
+              if (weekdayText.isNotEmpty)
+                Column(
+                  children: weekdayText
+                      .map(
+                        (schedule) => Text(
+                          schedule,
+                          style: const TextStyle(fontSize: 15.0),
+                        ),
+                      )
+                      .toList(),
+                )
+              else
+                const Text(
+                  'Нет расписания',
+                  style: TextStyle(fontSize: 15.0),
+                ),
+              const SizedBox(height: 15.0),
               Visibility(
-                visible: widget.placeDetails['website'] != null ? true : false,
+                visible: widget.placeDetails['website'] != null,
                 child: InkWell(
                   onTap: () async {
-                    
                     if (await canLaunchUrl(
                         Uri.parse(widget.placeDetails['website']))) {
                       await launchUrl(
@@ -222,26 +215,27 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                     '${widget.placeDetails['website'] ?? 'N/A'}',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        color: Colors.blue,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w500),
+                      color: Colors.blue,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Container(
                 margin: const EdgeInsets.all(10.0),
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(10.0)),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 height: 350,
                 child: GoogleMap(
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
-                        widget.placeDetails['geometry']['location']['lat'],
-                        widget.placeDetails['geometry']['location']['lng']),
+                      widget.placeDetails['geometry']['location']['lat'],
+                      widget.placeDetails['geometry']['location']['lng'],
+                    ),
                     zoom: 15.0,
                   ),
                   markers: _createMarkers(),
@@ -258,12 +252,18 @@ class _PlaceDetailsState extends State<PlaceDetails> {
     return {
       Marker(
         markerId: const MarkerId('place'),
-        position: LatLng(widget.placeDetails['geometry']['location']['lat'],
-            widget.placeDetails['geometry']['location']['lng']),
+        position: LatLng(
+          widget.placeDetails['geometry']['location']['lat'],
+          widget.placeDetails['geometry']['location']['lng'],
+        ),
         infoWindow: InfoWindow(
           title: widget.placeDetails['name'] ?? '',
         ),
       ),
     };
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
   }
 }
