@@ -107,17 +107,18 @@ class _setBudgetHotelState extends State<setBudgetHotel> {
                               })
                             : setState(() {
                                 isVisible = false;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            CountPersonForRoom(
+                                              days: widget.days,
+                                              signInWithoutGoogle:
+                                                  widget.signInWithoutGoogle,
+                                              hotelBudget: int.parse(
+                                                  controllerBudget.text),
+                                            ))));
                               });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => CountPersonForRoom(
-                                      days: widget.days,
-                                      signInWithoutGoogle:
-                                          widget.signInWithoutGoogle,
-                                      hotelBudget:
-                                          int.parse(controllerBudget.text),
-                                    ))));
                       },
                       command: 'СЛЕДУЮЩИЙ'))
             ],

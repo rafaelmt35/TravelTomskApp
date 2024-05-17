@@ -126,23 +126,25 @@ class _SetMaxBudgetState extends State<SetMaxBudget> {
                                 isVisible = true;
                               })
                             : setState(() {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => ResultFiltration(
+                                              person: widget.person,
+                                              hotelBudget: widget.hotelBudget,
+                                              signInWithoutGoogle:
+                                                  widget.signInWithoutGoogle,
+                                              days: widget.days,
+                                              maxBudget: int.parse(
+                                                  controllerBudget.text),
+                                              rooms: widget.rooms,
+                                              selectedplaces:
+                                                  widget.selectedplaces,
+                                              choiceFoodRate:
+                                                  widget.choiceFoodRate,
+                                            ))));
                                 isVisible = false;
                               });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => ResultFiltration(
-                                      person: widget.person,
-                                      hotelBudget: widget.hotelBudget,
-                                      signInWithoutGoogle:
-                                          widget.signInWithoutGoogle,
-                                      days: widget.days,
-                                      maxBudget:
-                                          int.parse(controllerBudget.text),
-                                      rooms: widget.rooms,
-                                      selectedplaces: widget.selectedplaces,
-                                      choiceFoodRate: widget.choiceFoodRate,
-                                    ))));
                       },
                       command: 'ПЕРЕЙТИ К РЕЗУЛЬТАТУ'))
             ],

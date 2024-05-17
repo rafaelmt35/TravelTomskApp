@@ -141,20 +141,20 @@ class _placesToVisitState extends State<placesToVisit> {
                               })
                             : setState(() {
                                 isVisible = false;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            PreferenceRestaurantPrice(
+                                              hotelBudget: widget.hotelBudget,
+                                              selectedplaces: selectedplaces,
+                                              signInWithoutGoogle:
+                                                  widget.signInWithoutGoogle,
+                                              days: widget.days,
+                                              rooms: widget.rooms,
+                                              person: widget.person,
+                                            ))));
                               });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) =>
-                                    PreferenceRestaurantPrice(
-                                      hotelBudget: widget.hotelBudget,
-                                      selectedplaces: selectedplaces,
-                                      signInWithoutGoogle:
-                                          widget.signInWithoutGoogle,
-                                      days: widget.days,
-                                      rooms: widget.rooms,
-                                      person: widget.person,
-                                    ))));
                       },
                       command: 'СЛЕДУЮЩИЙ'))
             ],

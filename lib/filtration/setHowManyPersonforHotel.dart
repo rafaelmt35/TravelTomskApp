@@ -148,20 +148,20 @@ class _CountPersonForRoomState extends State<CountPersonForRoom> {
                             } else {
                               setState(() {
                                 isVisible = false;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => placesToVisit(
+                                              signInWithoutGoogle:
+                                                  widget.signInWithoutGoogle,
+                                              days: widget.days,
+                                              hotelBudget: widget.hotelBudget,
+                                              rooms: int.parse(
+                                                  controllerRoom.text),
+                                              person: int.parse(
+                                                  controllerPerson.text),
+                                            ))));
                               });
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) => placesToVisit(
-                                            signInWithoutGoogle:
-                                                widget.signInWithoutGoogle,
-                                            days: widget.days,
-                                            hotelBudget: widget.hotelBudget,
-                                            rooms:
-                                                int.parse(controllerRoom.text),
-                                            person: int.parse(
-                                                controllerPerson.text),
-                                          ))));
                             }
                           },
                           command: 'СЛЕДУЮЩИЙ'))

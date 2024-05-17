@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+// ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,53 +22,14 @@ class PlaceSearchPage extends StatefulWidget {
 class _PlaceSearchPageState extends State<PlaceSearchPage> {
   List<String> places = [];
   List<String> listPlaceId = [];
+  List<String> placesIdByName = [];
+  List<String> placesbyName = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     fetchPlaces();
-  }
-
-  Future<void> fetchPlaceDetailsByPlaceName(String placeName) async {
-    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
-    final apiKey = dotenv.env['API_KEY'];
-    const String townName = 'Tomsk, Russia';
-    final apiUrl = Uri.parse(
-        '$baseUrl/findplacefromtext/json?input=$placeName+in+$townName&inputtype=textquery&fields=place_id&key=$apiKey');
-
-    final response = await http.get(apiUrl);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final candidates = data['candidates'];
-
-      if (candidates.isNotEmpty) {
-        final placeId = candidates[0]['place_id'];
-        final detailsUrl =
-            Uri.parse('$baseUrl/details/json?place_id=$placeId&key=$apiKey');
-
-        final detailsResponse = await http.get(detailsUrl);
-
-        if (detailsResponse.statusCode == 200) {
-          final placeDetails = json.decode(detailsResponse.body)['result'];
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => widget.query == 'hotel'
-                  ? PlaceDetailsHotel(placeDetails: placeDetails)
-                  : PlaceDetails(placeDetails: placeDetails),
-            ),
-          );
-        } else {
-          throw Exception('Failed to load place details');
-        }
-      } else {
-        throw Exception('Place not found');
-      }
-    } else {
-      throw Exception('Failed to search for place');
-    }
   }
 
   Future<void> fetchPlaces() async {
@@ -85,7 +46,6 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
         places = results.map((place) => place['name'] as String).toList();
         listPlaceId =
             results.map((place) => place['place_id'] as String).toList();
-        print(listPlaceId);
         isLoading = false;
       });
     } else {
@@ -155,7 +115,9 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
             onPressed: () async {
               final String? selectedPlace = await showSearch<String>(
                 context: context,
-                delegate: PlaceSearchDelegate(places: places),
+                delegate: PlaceSearchDelegate(
+                  places: places,
+                ),
               );
               if (selectedPlace != null) {
                 fetchPlaceDetails(listPlaceId[places.indexOf(selectedPlace)]);
@@ -191,7 +153,9 @@ class _PlaceSearchPageState extends State<PlaceSearchPage> {
 class PlaceSearchDelegate extends SearchDelegate<String> {
   final List<String> places;
 
-  PlaceSearchDelegate({required this.places});
+  PlaceSearchDelegate({
+    required this.places,
+  });
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -234,6 +198,9 @@ class PlaceSearchDelegate extends SearchDelegate<String> {
       return const Center(
         child: Text('Подходящих мест не найдено.'),
       );
+      // return TestPage(
+      //   query: query,
+      // );
     }
 
     return ListView.builder(
@@ -243,7 +210,117 @@ class PlaceSearchDelegate extends SearchDelegate<String> {
         return ListTile(
           title: Text(place),
           onTap: () {
+            // Handle tap on a matched place
             close(context, place);
+          },
+        );
+      },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class TestPage extends StatefulWidget {
+  const TestPage({
+    super.key,
+    required this.query,
+  });
+  final String query;
+
+  @override
+  State<TestPage> createState() => _TestPageState();
+}
+
+class _TestPageState extends State<TestPage> {
+  @override
+  void initState() {
+    fetchPlaceByPlaceName();
+    super.initState();
+  }
+
+  List<String> placesbyName = [];
+  List<String> placesIdByName = [];
+  Future<void> fetchPlaceDetails(String placeId) async {
+    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
+    final apiUrl = Uri.parse(
+        '$baseUrl/details/json?place_id=$placeId&key=${dotenv.env["API_KEY"]}');
+    final response = await http.get(apiUrl);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      final placeDetails = data['result'];
+
+      print('Place Name: ${placeDetails['name']}');
+      print('Place Address: ${placeDetails['formatted_address']}');
+      if (placeDetails['photos'] != null) {
+        for (var photo in placeDetails['photos']) {
+          final photoReference = photo['photo_reference'];
+          final photoUrl =
+              'https://maps.googleapis.com/maps/api/placephoto?maxwidth=400&photoreference=$photoReference&key=${dotenv.env["API_KEY"]}';
+          print('Photo URL: $photoUrl');
+        }
+      }
+      print('Rating: ${placeDetails['rating']}');
+      print(
+          'formatted_phone_number: ${placeDetails['formatted_phone_number']}');
+      print('website: ${placeDetails['website']}');
+      print('price_level: ${placeDetails['price_level']}');
+      print('LAT : ${placeDetails['geometry']['location']['lat']}');
+      print('LAT : ${placeDetails['geometry']['location']['lng']}');
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget.query == 'hotel'
+              ? PlaceDetailsHotel(placeDetails: placeDetails)
+              : PlaceDetails(placeDetails: placeDetails),
+        ),
+      );
+    } else {
+      throw Exception('Failed to load place details');
+    }
+  }
+
+  Future<void> fetchPlaceByPlaceName() async {
+    const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
+    final apiKey = dotenv.env['API_KEY'];
+    const String townName = 'Tomsk, Russia';
+    final apiUrl = Uri.parse(
+        '$baseUrl/findplacefromtext/json?input=${widget.query}+in+$townName&inputtype=textquery&fields=place_id&key=$apiKey');
+
+    final response = await http.get(apiUrl);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data != null && data['results'] != null) {
+        final results = data['results'] as List;
+        setState(() {
+          placesbyName =
+              results.map((place) => place['name'] as String).toList();
+          placesIdByName =
+              results.map((place) => place['place_id'] as String).toList();
+        });
+      } else {
+        print('test');
+      }
+    } else {
+      throw Exception('Failed to load places');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: placesbyName.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(placesbyName[index]),
+          onTap: () {
+            // Handle tile tap
+            print('Tile tapped: ${placesbyName[index]}');
+            // Fetch details for the selected place
+            fetchPlaceDetails(placesIdByName[index]);
           },
         );
       },
