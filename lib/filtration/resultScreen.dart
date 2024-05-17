@@ -542,14 +542,14 @@ class _ResultFiltrationState extends State<ResultFiltration> {
                                           print('Error adding data: $error');
                                         });
                                         Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: ((context) => HomePage(
-                                                      signInWithoutGoogle: widget
-                                                          .signInWithoutGoogle,
-                                                    ))));
-                                        Navigator.popUntil(
-                                            context, ModalRoute.withName('/'));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => HomePage(
+                                              signInWithoutGoogle:
+                                                  widget.signInWithoutGoogle,
+                                            ),
+                                          ),
+                                        );
 
                                         print('Entered Text: $enteredText');
                                       },

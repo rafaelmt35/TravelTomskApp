@@ -133,7 +133,32 @@ class _CollectionTripsState extends State<CollectionTrips> {
                               padding: const EdgeInsets.all(0.0),
                               icon: const Icon(Icons.delete),
                               onPressed: () {
-                                deleteDocument(documents[index].id);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                          'Вы уверены, что хотите удалить эту поездку?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(
+                                                context); // Close the dialog
+                                          },
+                                          child: const Text('ОТМЕНИТЬ'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            deleteDocument(documents[index].id);
+                                            Navigator.pop(
+                                                context); // Close the dialog
+                                          },
+                                          child: const Text('УДАЛИТЬ'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                             ),
                           ),
