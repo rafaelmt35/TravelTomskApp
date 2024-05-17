@@ -195,12 +195,9 @@ class PlaceSearchDelegate extends SearchDelegate<String> {
         .toList();
 
     if (matchedPlaces.isEmpty) {
-      return const Center(
-        child: Text('Подходящих мест не найдено.'),
+      return TestPage(
+        query: query,
       );
-      // return TestPage(
-      //   query: query,
-      // );
     }
 
     return ListView.builder(
@@ -240,6 +237,7 @@ class _TestPageState extends State<TestPage> {
 
   List<String> placesbyName = [];
   List<String> placesIdByName = [];
+
   Future<void> fetchPlaceDetails(String placeId) async {
     const String baseUrl = 'https://maps.googleapis.com/maps/api/place';
     final apiUrl = Uri.parse(
@@ -248,7 +246,6 @@ class _TestPageState extends State<TestPage> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-
       final placeDetails = data['result'];
 
       print('Place Name: ${placeDetails['name']}');
@@ -287,14 +284,14 @@ class _TestPageState extends State<TestPage> {
     final apiKey = dotenv.env['API_KEY'];
     const String townName = 'Tomsk, Russia';
     final apiUrl = Uri.parse(
-        '$baseUrl/findplacefromtext/json?input=${widget.query}+in+$townName&inputtype=textquery&fields=place_id&key=$apiKey');
+        '$baseUrl/findplacefromtext/json?input=${widget.query}+in+$townName&inputtype=textquery&fields=place_id,name&key=$apiKey');
 
     final response = await http.get(apiUrl);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data != null && data['results'] != null) {
-        final results = data['results'] as List;
+      if (data != null && data['candidates'] != null) {
+        final results = data['candidates'] as List;
         setState(() {
           placesbyName =
               results.map((place) => place['name'] as String).toList();
@@ -302,7 +299,10 @@ class _TestPageState extends State<TestPage> {
               results.map((place) => place['place_id'] as String).toList();
         });
       } else {
-        print('test');
+        setState(() {
+          placesbyName = [];
+          placesIdByName = [];
+        });
       }
     } else {
       throw Exception('Failed to load places');
@@ -311,6 +311,12 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (placesbyName.isEmpty) {
+      return const Center(
+        child: Text('Подходящих мест не найдено.'),
+      );
+    }
+
     return ListView.builder(
       itemCount: placesbyName.length,
       itemBuilder: (context, index) {
