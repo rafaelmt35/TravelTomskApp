@@ -6,6 +6,7 @@ Android application for finding recommended places in Tomsk, Russia.
 1. User can see the places in Tomsk based on type place (Park, Museum, Mall, e.t.c )
 2. User can login to the application using their own email or Google Account
 3. Filtration function - function that provides user to find their recommended places and accommodation + budget counting for their trip based on their preferences. 
+4. User can see recommendation place in Tomsk.
 
 ## Library: 
   1. cupertino_icons: ^1.0.2
@@ -19,3 +20,6 @@ Android application for finding recommended places in Tomsk, Russia.
   9. http: ^1.2.1
   10. google_maps_flutter: ^2.6.0
   11. firebase_core: ^2.30.0
+
+### Link to install the application
+![image](https://github.com/rafaelmt35/TravelTomskApp/assets/99629720/7f33781a-7eb0-4b73-bc69-abf5cdbe86c5)
