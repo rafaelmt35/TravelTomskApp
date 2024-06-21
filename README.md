@@ -24,4 +24,4 @@ Android application for finding recommended places in Tomsk, Russia.
 ### Link to install the application
 ![image](https://github.com/rafaelmt35/TravelTomskApp/assets/99629720/7f33781a-7eb0-4b73-bc69-abf5cdbe86c5)
 
-### Link to documentation [Link](https://vital.lib.tsu.ru/vital/access/manager/Repository/vital:20290)
+### [Link to documentation](https://vital.lib.tsu.ru/vital/access/manager/Repository/vital:20290)
